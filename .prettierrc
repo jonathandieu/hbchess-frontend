@@ -7,5 +7,6 @@
     "bracketSameLine": false,
     "parser": "babel",
     "noSemi": true,
-    "rcVerbose": true
+    "rcVerbose": true,
+    "endOfLine": "lf"
 }

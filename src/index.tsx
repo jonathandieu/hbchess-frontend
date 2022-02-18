@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from "react-router-dom"; // Used to keep UI in sync with the URL, only reloading components that need to be changed instead of entire page
+import { BrowserRouter } from 'react-router-dom'; // Used to keep UI in sync with the URL, only reloading components that need to be changed instead of entire page
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
