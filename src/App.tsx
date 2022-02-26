@@ -1,22 +1,12 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Testing that Automatic Deployment Works!</p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="flex justify-center items-center h-screen w-screen">
+      <h1 className="text-5xl text-center text-green-500 font-serif">
+        Welcome! <br />
+        Everything is fine
+      </h1>
     </div>
   );
 }
