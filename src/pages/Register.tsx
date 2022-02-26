@@ -1,14 +1,14 @@
 import React from 'react';
 
-function App() {
+function Register() {
   return (
     <div className="flex justify-center items-center h-screen w-screen">
       <h1 className="text-5xl text-center text-green-500 font-serif">
         Welcome! <br />
-        Everything is fine
+        Everything is register
       </h1>
     </div>
   );
 }
 
-export default App;
+export default Register;
