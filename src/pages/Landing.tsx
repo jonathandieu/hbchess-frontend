@@ -11,14 +11,14 @@ function Landing() {
 
       <div className="flex flex-row space-x-5">
         <Link
-          to="/user/login"
+          to="/auth/login"
           className="text-2xl px-4 py-2 border-2 border-green-300 rounded-lg text-gray-700 shadow-md"
         >
           Login
         </Link>
 
         <Link
-          to="/user/register"
+          to="/auth/register"
           className="text-2xl px-4 py-2 border-2 border-green-300 rounded-lg text-gray-700 shadow-md"
         >
           Register
