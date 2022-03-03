@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Leaderboard from './pages/Leaderboard';
 import './styles/index.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'; // Used to keep UI in sync with the URL, only reloading components that need to be changed instead of entire page
 ReactDOM.render(
@@ -12,6 +13,7 @@ ReactDOM.render(
         <Route path="/" element={<Landing />} />
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/signup" element={<Register />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
