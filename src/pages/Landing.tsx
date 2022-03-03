@@ -1,30 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-
+import LoggedOutTemplate from '../components/LoggedOutTemplate';
+import ButtonLink from '../components/ButtonLink';
 function Landing() {
   return (
-    <div className="flex flex-col justify-center items-center h-screen w-screen">
-      <h1 className="text-5xl pb-4 text-center text-green-500 font-serif">
-        Welcome! <br />
-        Everything is fine
-      </h1>
-
-      <div className="flex flex-row space-x-5">
-        <Link
-          to="/auth/login"
-          className="text-2xl px-4 py-2 border-2 border-green-300 rounded-lg text-gray-700 shadow-md"
-        >
-          Login
-        </Link>
-
-        <Link
-          to="/auth/register"
-          className="text-2xl px-4 py-2 border-2 border-green-300 rounded-lg text-gray-700 shadow-md"
-        >
-          Register
-        </Link>
+    <LoggedOutTemplate>
+      <div className="h-full w-full flex flex-col justify-center items-center space-y-8">
+        <h1 className="text-2xl lg:text-4xl xl:text-6xl 2xl:text-9xl text-gray-800 w-2/3 text-center font-bold drop-shadow-2xl">
+          Play Hand Brain Chess With Friends!
+        </h1>
+        <ButtonLink toLink="/auth/signup">Sign Up</ButtonLink>
       </div>
-    </div>
+    </LoggedOutTemplate>
   );
 }
 
