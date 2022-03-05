@@ -25,7 +25,7 @@ function Register() {
                   Username
                 </label>
                 <input
-                  id="email-address"
+                  id="username"
                   name="username"
                   type="text"
                   autoComplete="username"
