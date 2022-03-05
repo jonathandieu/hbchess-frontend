@@ -1,46 +1,96 @@
 import React from 'react';
 import LoggedOutTemplate from '../components/LoggedOutTemplate';
+import { LockClosedIcon } from '@heroicons/react/solid';
 
 function Register() {
   return (
     <LoggedOutTemplate>
-      <div className="flex justify-center items-center h-full w-full">
-        <div className="bg-gray-100 rounded-md p-4 shadow-2xl w-4/5 xl:w-1/2 2xl:w-1/3 h-2/3 lg:h-1/2 flex flex-col items-center">
-          <div className="flex flex-col justify-center items-center space-y-2 md:space-y-5 w-2/3 h-4/5">
-            <h1 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl text-center text-green-500 font-serif mb-5">
-              Sign Up Today!
-            </h1>
-            <div className="flex flex-col lg:flex-row justify-between w-full">
-              <label className="text-lg md:text-xl text-gray-800">
-                Username
-              </label>
-              <input type="text" className="form-input px-4 py-3 rounded-md" />
-            </div>
-            <div className="flex flex-col lg:flex-row justify-between w-full">
-              <label className="text-lg md:text-xl text-gray-800">Email</label>
-              <input type="email" className="form-input px-4 py-3 rounded-md" />
-            </div>
-            <div className="flex flex-col lg:flex-row justify-between w-full">
-              <label className="text-lg md:text-xl text-gray-800">
-                Password
-              </label>
-              <input
-                type="password"
-                className="form-input px-4 py-3 rounded-md"
-              />
-            </div>
+      <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-8 bg-gray-50 p-5 rounded-lg shadow-2xl">
+          <div>
+            <img
+              className="mx-auto h-12 w-auto"
+              src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
+              alt="Workflow"
+            />
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+              Create your account today!
+            </h2>
           </div>
-          <div className="h-1/5 w-full flex flex-col items-center justify-end">
-            <button className="py-2 px-2 rounded-full bg-forest-green-web hover:bg-green-500 sm:text-lg md:text-xl font-semibold w-1/2">
-              Create Account
-            </button>
-            <div className="text-lg text-gray-800 mt-4">
-              {' Have an account? '}
-              <span className="text-lg text-forest-green-web hover:text-green-500 cursor-pointer">
-                Sign in.
-              </span>
+          <form className="mt-8 space-y-6" action="#" method="POST">
+            <input type="hidden" name="remember" defaultValue="true" />
+            <div className="rounded-md shadow-sm -space-y-px">
+              <div>
+                <label htmlFor="email-address" className="sr-only">
+                  Username
+                </label>
+                <input
+                  id="email-address"
+                  name="username"
+                  type="text"
+                  autoComplete="username"
+                  required
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                  placeholder="Username"
+                />
+              </div>
+              <div>
+                <label htmlFor="email-address" className="sr-only">
+                  Email address
+                </label>
+                <input
+                  id="email-address"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                  placeholder="Email address"
+                />
+              </div>
+              <div>
+                <label htmlFor="password" className="sr-only">
+                  Password
+                </label>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-green-500 focus:border-green-500 focus:z-10 sm:text-sm"
+                  placeholder="Password"
+                />
+              </div>
             </div>
-          </div>
+
+            <div>
+              <button
+                type="submit"
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              >
+                <span className="absolute left-0 inset-y-0 flex items-center pl-3">
+                  <LockClosedIcon
+                    className="h-5 w-5 text-green-500 group-hover:text-green-400"
+                    aria-hidden="true"
+                  />
+                </span>
+                Sign Up
+              </button>
+            </div>
+
+            <div className="flex justify-center">
+              <div className="text-sm">
+                {'Already have an account? '}
+                <a
+                  href="#"
+                  className="font-medium text-green-600 hover:text-green-500"
+                >
+                  Sign In
+                </a>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </LoggedOutTemplate>
