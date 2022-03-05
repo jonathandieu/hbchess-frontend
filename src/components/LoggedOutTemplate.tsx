@@ -6,6 +6,7 @@ import {
   UserAddIcon,
   LoginIcon
 } from '@heroicons/react/outline';
+
 const LoggedOutTemplate: React.FC = ({ children }) => {
   return (
     <div className="grid grid-cols-5 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 h-screen">
