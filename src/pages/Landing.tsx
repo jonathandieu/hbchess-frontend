@@ -1,6 +1,6 @@
-import React from 'react';
 import LoggedOutTemplate from '../components/LoggedOutTemplate';
 import ButtonLink from '../components/ButtonLink';
+
 function Landing() {
   return (
     <LoggedOutTemplate>
