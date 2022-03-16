@@ -17,6 +17,7 @@ export const authSlice = createSlice({
       { payload: { token } }: PayloadAction<{ token: string }>
     ) => {
       state.token = token;
+      localStorage.setItem('token', token);
     }
   }
 });

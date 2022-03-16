@@ -29,7 +29,7 @@ function Login() {
     try {
       const user = await login(loginFormState).unwrap();
       dispatch(setCredentials(user));
-      localStorage.setItem('token', user.token);
+      toast.dismiss();
       navigate('/dashboard');
     } catch (err) {
       toast.error(err.data.message);
