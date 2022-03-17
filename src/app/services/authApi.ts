@@ -20,10 +20,15 @@ export interface RegisterRequest {
   password: string;
 }
 
+const baseUrl =
+  process.env.NODE_ENV === 'production'
+    ? 'http://localhost/api/users'
+    : 'http://localhost:8080/api/users';
+
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:8080/api/users',
+    baseUrl: baseUrl,
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       if (token) {
