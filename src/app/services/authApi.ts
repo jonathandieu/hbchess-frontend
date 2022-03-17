@@ -22,7 +22,7 @@ export interface RegisterRequest {
 
 const baseUrl =
   process.env.NODE_ENV === 'production'
-    ? 'http://hbchess.app/api/users'
+    ? 'https://hbchess.app/api/users'
     : 'http://localhost:8080/api/users';
 
 export const authApi = createApi({
