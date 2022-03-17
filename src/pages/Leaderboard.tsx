@@ -1,4 +1,3 @@
-import React from 'react';
 import LoggedOutTemplate from '../components/LoggedOutTemplate';
 
 function LeaderBoard() {

@@ -1,8 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LoggedOutTemplate from '../components/LoggedOutTemplate';
 import { LockClosedIcon } from '@heroicons/react/solid';
+import { RegisterRequest, useRegisterMutation } from '../app/services/authApi';
+import { useNavigate } from 'react-router-dom';
+import Spinner from '../components/Spinner';
+import { toast } from 'react-toastify';
 
 function Register() {
+  const navigate = useNavigate();
+
+  const [register, { isLoading }] = useRegisterMutation();
+  const [registerFormState, setRegisterFormState] = useState<RegisterRequest>({
+    username: '',
+    email: '',
+    password: ''
+  });
+
+  const handleChange = ({
+    target: { name, value }
+  }: React.ChangeEvent<HTMLInputElement>) =>
+    setRegisterFormState((prev) => ({ ...prev, [name]: value }));
+
+  const handleRegisterRequest = async () => {
+    try {
+      const response = await register(registerFormState).unwrap();
+      navigate('/login');
+      toast.success(response.message);
+    } catch (err) {
+      toast.error(err.data.message);
+    }
+  };
+
   return (
     <LoggedOutTemplate>
       <div className="flex justify-center items-center py-12 px-4 min-h-full sm:px-6 lg:px-8">
@@ -32,6 +60,7 @@ function Register() {
                   required
                   className="block relative focus:z-10 py-2 px-3 w-full text-gray-900 placeholder:text-gray-500 rounded-none rounded-t-md border border-gray-300 focus:border-green-500 focus:outline-none focus:ring-green-500 appearance-none sm:text-sm"
                   placeholder="Username"
+                  onChange={handleChange}
                 />
               </div>
               <div>
@@ -46,6 +75,7 @@ function Register() {
                   required
                   className="block relative focus:z-10 py-2 px-3 w-full text-gray-900 placeholder:text-gray-500 rounded-none border border-gray-300 focus:border-green-500 focus:outline-none focus:ring-green-500 appearance-none sm:text-sm"
                   placeholder="Email address"
+                  onChange={handleChange}
                 />
               </div>
               <div>
@@ -60,6 +90,7 @@ function Register() {
                   required
                   className="block relative focus:z-10 py-2 px-3 w-full text-gray-900 placeholder:text-gray-500 rounded-none rounded-b-md border border-gray-300 focus:border-green-500 focus:outline-none focus:ring-green-500 appearance-none sm:text-sm"
                   placeholder="Password"
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -76,7 +107,7 @@ function Register() {
                     aria-hidden="true"
                   />
                 </span>
-                Sign Up
+                {isLoading ? <Spinner /> : 'Sign up'}
               </button>
             </div>
 

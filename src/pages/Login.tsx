@@ -1,8 +1,41 @@
-import React from 'react';
 import LoggedOutTemplate from '../components/LoggedOutTemplate';
 import { LockClosedIcon } from '@heroicons/react/solid';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setCredentials } from '../app/features/auth/authSlice';
+import { useLoginMutation } from '../app/services/authApi';
+import type { LoginRequest } from '../app/services/authApi';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+import Spinner from '../components/Spinner';
 
 function Login() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [login, { isLoading }] = useLoginMutation();
+
+  const [loginFormState, setLoginFormState] = useState<LoginRequest>({
+    email: '',
+    password: ''
+  });
+
+  const handleChange = ({
+    target: { name, value }
+  }: React.ChangeEvent<HTMLInputElement>) =>
+    setLoginFormState((prev) => ({ ...prev, [name]: value }));
+
+  const handleLoginRequest = async () => {
+    try {
+      const user = await login(loginFormState).unwrap();
+      dispatch(setCredentials(user));
+      toast.dismiss();
+      navigate('/dashboard');
+    } catch (err) {
+      toast.error(err.data.message);
+    }
+  };
+
   return (
     <LoggedOutTemplate>
       <div className="flex justify-center items-center py-12 px-4 min-h-full sm:px-6 lg:px-8">
@@ -32,6 +65,7 @@ function Login() {
                   required
                   className="block relative focus:z-10 py-2 px-3 w-full text-gray-900 placeholder:text-gray-500 rounded-none rounded-t-md border border-gray-300 focus:border-green-500 focus:outline-none focus:ring-green-500 appearance-none sm:text-sm"
                   placeholder="Email address"
+                  onChange={handleChange}
                 />
               </div>
               <div>
@@ -46,6 +80,7 @@ function Login() {
                   required
                   className="block relative focus:z-10 py-2 px-3 w-full text-gray-900 placeholder:text-gray-500 rounded-none rounded-b-md border border-gray-300 focus:border-green-500 focus:outline-none focus:ring-green-500 appearance-none sm:text-sm"
                   placeholder="Password"
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -88,7 +123,7 @@ function Login() {
                     aria-hidden="true"
                   />
                 </span>
-                Sign in
+                {isLoading ? <Spinner /> : 'Sign in'}
               </button>
             </div>
           </form>
