@@ -4,12 +4,14 @@
         "plugin:prettier/recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:react/recommended",
-        "plugin:react/jsx-runtime"
+        "plugin:react/jsx-runtime",
+        "plugin:tailwindcss/recommended"
     ],
     "plugins": [
         "prettier",
         "@typescript-eslint",
-        "react"
+        "react",
+        "tailwindcss"
     ],
     "rules": {
         "eqeqeq": "error",
@@ -18,7 +20,9 @@
         "no-unused-vars": "off",
         "prettier/prettier": [
             "error",
-            {},
+            {
+                "parser": "typescript"
+            },
             {
                 "usePrettierrc": true
             }

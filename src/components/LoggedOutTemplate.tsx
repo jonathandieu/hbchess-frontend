@@ -17,14 +17,14 @@ const LoggedOutTemplate: React.FC = ({ children }) => {
   };
 
   return (
-    <div className="relative h-screen flex flex-col md:flex-row">
-      <div className="bg-green-800 text-green-100 flex justify-between md:hidden">
-        <a href="#" className="block p-4 text-white font-bold">
+    <div className="flex relative flex-col h-screen md:flex-row">
+      <div className="flex justify-between text-green-100 bg-green-800 md:hidden">
+        <a href="#" className="block p-4 font-bold text-white">
           HBChess
         </a>
 
         <button
-          className="mobile-menu-button p-4 focus:outline-none focus:bg-green-700"
+          className="p-4 focus:bg-green-700 focus:outline-none"
           onClick={() => {
             if (sidebarRef !== null) {
               sidebarRef.current.classList.toggle('-translate-x-full');
@@ -32,7 +32,7 @@ const LoggedOutTemplate: React.FC = ({ children }) => {
           }}
         >
           <svg
-            className="h-5 w-5"
+            className="w-5 h-5"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -50,11 +50,11 @@ const LoggedOutTemplate: React.FC = ({ children }) => {
 
       <div
         ref={sidebarRef}
-        className="z-10 bg-gray-800 text-gray-100 w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition duration-200 ease-in-out"
+        className="absolute inset-y-0 left-0 z-10 py-7 px-2 space-y-6 w-64 text-gray-100 bg-gray-800 transition duration-200 ease-in-out -translate-x-full md:relative md:translate-x-0"
       >
         <Link
           to="/"
-          className="text-white flex items-center space-x-2 px-4"
+          className="flex items-center px-4 space-x-2 text-white"
           onClick={closeSidebar}
         >
           <svg
@@ -77,12 +77,12 @@ const LoggedOutTemplate: React.FC = ({ children }) => {
         <nav>
           <Link
             to="/"
-            className="py-2.5 px-4 rounded transition duration-200 hover:bg-green-700 hover:text-white flex flex-row"
+            className="flex flex-row py-2.5 px-4 hover:text-white hover:bg-green-700 rounded transition duration-200"
             onClick={closeSidebar}
           >
             <span className="flex items-center pr-2">
               <HomeIcon
-                className="h-5 w-5 text-gray-50 group-hover:text-nyanza"
+                className="w-5 h-5 text-gray-50 group-hover:text-nyanza"
                 aria-hidden="true"
               />
             </span>
@@ -90,12 +90,12 @@ const LoggedOutTemplate: React.FC = ({ children }) => {
           </Link>
           <Link
             to="/leaderboard"
-            className="py-2.5 px-4 rounded transition duration-200 hover:bg-green-700 hover:text-white flex flex-row"
+            className="flex flex-row py-2.5 px-4 hover:text-white hover:bg-green-700 rounded transition duration-200"
             onClick={closeSidebar}
           >
             <span className="flex items-center pr-2">
               <ViewListIcon
-                className="h-5 w-5 text-gray-50 group-hover:text-nyanza"
+                className="w-5 h-5 text-gray-50 group-hover:text-nyanza"
                 aria-hidden="true"
               />
             </span>
@@ -103,12 +103,12 @@ const LoggedOutTemplate: React.FC = ({ children }) => {
           </Link>
           <Link
             to="/auth/signup"
-            className="py-2.5 px-4 rounded transition duration-200 hover:bg-green-700 hover:text-white flex flex-row"
+            className="flex flex-row py-2.5 px-4 hover:text-white hover:bg-green-700 rounded transition duration-200"
             onClick={closeSidebar}
           >
             <span className="flex items-center pr-2">
               <UserAddIcon
-                className="h-5 w-5 text-gray-50 group-hover:text-nyanza"
+                className="w-5 h-5 text-gray-50 group-hover:text-nyanza"
                 aria-hidden="true"
               />
             </span>
@@ -116,12 +116,12 @@ const LoggedOutTemplate: React.FC = ({ children }) => {
           </Link>
           <Link
             to="/auth/login"
-            className="py-2.5 px-4 rounded transition duration-200 hover:bg-green-700 hover:text-white flex flex-row"
+            className="flex flex-row py-2.5 px-4 hover:text-white hover:bg-green-700 rounded transition duration-200"
             onClick={closeSidebar}
           >
             <span className="flex items-center pr-2">
               <LoginIcon
-                className="h-5 w-5 text-gray-50 group-hover:text-nyanza"
+                className="w-5 h-5 text-gray-50 group-hover:text-nyanza"
                 aria-hidden="true"
               />
             </span>
