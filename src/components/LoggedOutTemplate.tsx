@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Link, Navigate, Outlet } from 'react-router-dom';
+import { Link, useNavigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import {
   HomeIcon,
@@ -10,9 +10,9 @@ import {
 
 const LoggedOutTemplate: React.FC = () => {
   const { user } = useAuth();
-
+  const navigate = useNavigate();
   if (user) {
-    return <Navigate to="/dashboard" replace />;
+    navigate('/dashboard', { replace: true });
   }
 
   const sidebarRef = useRef(document.createElement('div'));

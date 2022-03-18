@@ -30,12 +30,15 @@ export const authSlice = createSlice({
       state.token = token;
       const { id, username, email, exp }: User = jwt_decode(token);
       state.user = { id, username, email, exp };
-      localStorage.setItem('token', token);
+    },
+    resetCredentials: (state) => {
+      state.token = '';
+      state.user = null;
     }
   }
 });
 
-export const { setCredentials } = authSlice.actions;
+export const { setCredentials, resetCredentials } = authSlice.actions;
 
 export default authSlice.reducer;
 

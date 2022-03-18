@@ -1,17 +1,22 @@
-import { Outlet, Navigate, Link } from 'react-router-dom';
+import { Outlet, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useRef } from 'react';
 import {
   PlayIcon,
   UsersIcon,
   ChartSquareBarIcon,
-  ViewListIcon
+  ViewListIcon,
+  LogoutIcon
 } from '@heroicons/react/outline';
+import { resetCredentials } from '../app/features/auth/authSlice';
+import { useAppDispatch } from '../hooks/store';
 
 const LoggedInTemplate = () => {
   const { user } = useAuth();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   if (!user) {
-    return <Navigate to="/auth/login" replace />;
+    navigate('/auth/login', { replace: true });
   }
 
   const sidebarRef = useRef(document.createElement('div'));
@@ -20,6 +25,11 @@ const LoggedInTemplate = () => {
     if (sidebarRef !== null) {
       sidebarRef.current.classList.add('-translate-x-full');
     }
+  };
+
+  const handleLogout = () => {
+    dispatch(resetCredentials());
+    navigate('/', { replace: true });
   };
 
   return (
@@ -56,7 +66,7 @@ const LoggedInTemplate = () => {
 
       <div
         ref={sidebarRef}
-        className="absolute inset-y-0 left-0 z-10 py-7 px-2 space-y-6 w-64 text-gray-100 bg-gray-800 transition duration-200 ease-in-out -translate-x-full md:relative md:translate-x-0"
+        className="flex absolute inset-y-0 left-0 z-10 flex-col py-7 px-2 space-y-6 w-64 text-gray-100 bg-gray-800 transition duration-200 ease-in-out -translate-x-full md:relative md:translate-x-0"
       >
         <Link
           to="/dashboard"
@@ -80,7 +90,7 @@ const LoggedInTemplate = () => {
           <span className="text-2xl font-extrabold">HBChess</span>
         </Link>
 
-        <nav>
+        <nav className="flex flex-col flex-1">
           <Link
             to="/dashboard/play"
             className="flex flex-row py-2.5 px-4 hover:text-white hover:bg-green-700 rounded transition duration-200"
@@ -133,6 +143,20 @@ const LoggedInTemplate = () => {
             </span>
             Leaderboard
           </Link>
+          <div className="flex flex-1 items-end">
+            <button
+              className="flex flex-row py-2.5 px-4 w-full hover:text-white hover:bg-green-700 rounded transition duration-200"
+              onClick={handleLogout}
+            >
+              <span className="flex items-center pr-2">
+                <LogoutIcon
+                  className="w-5 h-5 text-gray-50 group-hover:text-nyanza"
+                  aria-hidden="true"
+                />
+              </span>
+              Sign Out
+            </button>
+          </div>
         </nav>
       </div>
 
