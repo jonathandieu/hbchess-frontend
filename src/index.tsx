@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import LoggedOutTemplate from './components/LoggedOutTemplate';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -17,10 +18,12 @@ ReactDOM.render(
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/auth/login" element={<Login />} />
-          <Route path="/auth/signup" element={<Register />} />
-          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/" element={<LoggedOutTemplate />}>
+            <Route path="/" element={<Landing />} />
+            <Route path="/auth/login" element={<Login />} />
+            <Route path="/auth/signup" element={<Register />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </Provider>

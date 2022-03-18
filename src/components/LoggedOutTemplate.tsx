@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import {
   HomeIcon,
   ViewListIcon,
@@ -7,7 +7,7 @@ import {
   LoginIcon
 } from '@heroicons/react/outline';
 
-const LoggedOutTemplate: React.FC = ({ children }) => {
+const LoggedOutTemplate: React.FC = () => {
   const sidebarRef = useRef(document.createElement('div'));
 
   const closeSidebar = () => {
@@ -130,7 +130,9 @@ const LoggedOutTemplate: React.FC = ({ children }) => {
         </nav>
       </div>
 
-      <div className="flex-1 h-full bg-hero-pattern">{children}</div>
+      <div className="flex-1 h-full bg-hero-pattern">
+        <Outlet />
+      </div>
     </div>
   );
 };
