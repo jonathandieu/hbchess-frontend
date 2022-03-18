@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
-import { Link, Navigate, Outlet } from 'react-router-dom';
+import { Outlet, Navigate, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { useRef } from 'react';
 import {
   HomeIcon,
   ViewListIcon,
@@ -8,11 +8,10 @@ import {
   LoginIcon
 } from '@heroicons/react/outline';
 
-const LoggedOutTemplate: React.FC = () => {
+const LoggedInTemplate = () => {
   const { user } = useAuth();
-
-  if (user) {
-    return <Navigate to="/dashboard" replace />;
+  if (!user) {
+    return <Navigate to="/auth/login" replace />;
   }
 
   const sidebarRef = useRef(document.createElement('div'));
@@ -83,7 +82,7 @@ const LoggedOutTemplate: React.FC = () => {
 
         <nav>
           <Link
-            to="/"
+            to="/dashboard/play"
             className="flex flex-row py-2.5 px-4 hover:text-white hover:bg-green-700 rounded transition duration-200"
             onClick={closeSidebar}
           >
@@ -93,10 +92,10 @@ const LoggedOutTemplate: React.FC = () => {
                 aria-hidden="true"
               />
             </span>
-            Home
+            Play Game
           </Link>
           <Link
-            to="/leaderboard"
+            to="/dashboard/teams"
             className="flex flex-row py-2.5 px-4 hover:text-white hover:bg-green-700 rounded transition duration-200"
             onClick={closeSidebar}
           >
@@ -106,10 +105,10 @@ const LoggedOutTemplate: React.FC = () => {
                 aria-hidden="true"
               />
             </span>
-            Leaderboard
+            Teams
           </Link>
           <Link
-            to="/auth/signup"
+            to="/dashboard/stats"
             className="flex flex-row py-2.5 px-4 hover:text-white hover:bg-green-700 rounded transition duration-200"
             onClick={closeSidebar}
           >
@@ -119,10 +118,10 @@ const LoggedOutTemplate: React.FC = () => {
                 aria-hidden="true"
               />
             </span>
-            Sign Up
+            My Stats
           </Link>
           <Link
-            to="/auth/login"
+            to="/dashboard/leaderboard"
             className="flex flex-row py-2.5 px-4 hover:text-white hover:bg-green-700 rounded transition duration-200"
             onClick={closeSidebar}
           >
@@ -132,7 +131,7 @@ const LoggedOutTemplate: React.FC = () => {
                 aria-hidden="true"
               />
             </span>
-            Log In
+            Leaderboard
           </Link>
         </nav>
       </div>
@@ -144,4 +143,4 @@ const LoggedOutTemplate: React.FC = () => {
   );
 };
 
-export default LoggedOutTemplate;
+export default LoggedInTemplate;

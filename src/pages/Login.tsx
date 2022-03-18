@@ -1,6 +1,6 @@
 import { LockClosedIcon } from '@heroicons/react/solid';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../hooks/store';
 import { setCredentials } from '../app/features/auth/authSlice';
 import { useLoginMutation } from '../app/services/authApi';
 import type { LoginRequest } from '../app/services/authApi';
@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import Spinner from '../components/Spinner';
 
 function Login() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [login, { isLoading }] = useLoginMutation();
@@ -26,8 +26,8 @@ function Login() {
 
   const handleLoginRequest = async () => {
     try {
-      const user = await login(loginFormState).unwrap();
-      dispatch(setCredentials(user));
+      const token = await login(loginFormState).unwrap();
+      dispatch(setCredentials(token));
       toast.dismiss();
       navigate('/dashboard');
     } catch (err) {
