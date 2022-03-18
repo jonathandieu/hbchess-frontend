@@ -2,10 +2,10 @@ import { Outlet, Navigate, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useRef } from 'react';
 import {
-  HomeIcon,
-  ViewListIcon,
-  UserAddIcon,
-  LoginIcon
+  PlayIcon,
+  UsersIcon,
+  ChartSquareBarIcon,
+  ViewListIcon
 } from '@heroicons/react/outline';
 
 const LoggedInTemplate = () => {
@@ -59,7 +59,7 @@ const LoggedInTemplate = () => {
         className="absolute inset-y-0 left-0 z-10 py-7 px-2 space-y-6 w-64 text-gray-100 bg-gray-800 transition duration-200 ease-in-out -translate-x-full md:relative md:translate-x-0"
       >
         <Link
-          to="/"
+          to="/dashboard"
           className="flex items-center px-4 space-x-2 text-white"
           onClick={closeSidebar}
         >
@@ -87,7 +87,7 @@ const LoggedInTemplate = () => {
             onClick={closeSidebar}
           >
             <span className="flex items-center pr-2">
-              <HomeIcon
+              <PlayIcon
                 className="w-5 h-5 text-gray-50 group-hover:text-nyanza"
                 aria-hidden="true"
               />
@@ -100,7 +100,7 @@ const LoggedInTemplate = () => {
             onClick={closeSidebar}
           >
             <span className="flex items-center pr-2">
-              <ViewListIcon
+              <UsersIcon
                 className="w-5 h-5 text-gray-50 group-hover:text-nyanza"
                 aria-hidden="true"
               />
@@ -113,7 +113,7 @@ const LoggedInTemplate = () => {
             onClick={closeSidebar}
           >
             <span className="flex items-center pr-2">
-              <UserAddIcon
+              <ChartSquareBarIcon
                 className="w-5 h-5 text-gray-50 group-hover:text-nyanza"
                 aria-hidden="true"
               />
@@ -126,7 +126,7 @@ const LoggedInTemplate = () => {
             onClick={closeSidebar}
           >
             <span className="flex items-center pr-2">
-              <LoginIcon
+              <ViewListIcon
                 className="w-5 h-5 text-gray-50 group-hover:text-nyanza"
                 aria-hidden="true"
               />

@@ -6,6 +6,10 @@ import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Leaderboard from './pages/Leaderboard';
+import Dashboard from './pages/Dashboard';
+import Play from './pages/Play';
+import Teams from './pages/Teams';
+import Stats from './pages/Stats';
 import { store } from './app/store';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -33,7 +37,11 @@ ReactDOM.render(
             </Route>
 
             <Route path="/dashboard" element={<LoggedInTemplate />}>
-              {' '}
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/dashboard/play" element={<Play />} />
+              <Route path="/dashboard/teams" element={<Teams />} />
+              <Route path="/dashboard/stats" element={<Stats />} />
+              <Route path="/dashboard/leaderboard" element={<Leaderboard />} />
             </Route>
           </Routes>
         </BrowserRouter>
