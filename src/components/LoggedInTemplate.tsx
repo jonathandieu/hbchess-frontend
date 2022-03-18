@@ -1,6 +1,6 @@
 import { Outlet, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import {
   PlayIcon,
   UsersIcon,
@@ -15,9 +15,12 @@ const LoggedInTemplate = () => {
   const { user } = useAuth();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  if (!user) {
-    navigate('/auth/login', { replace: true });
-  }
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/auth/login', { replace: true });
+    }
+  }, [user]);
 
   const sidebarRef = useRef(document.createElement('div'));
 

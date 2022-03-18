@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Link, useNavigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import {
@@ -11,9 +11,12 @@ import {
 const LoggedOutTemplate: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  if (user) {
-    navigate('/dashboard', { replace: true });
-  }
+
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [user]);
 
   const sidebarRef = useRef(document.createElement('div'));
 

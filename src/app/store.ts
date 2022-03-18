@@ -4,14 +4,25 @@ import storage from 'redux-persist/lib/storage';
 import { combineReducers } from 'redux';
 import { persistReducer } from 'redux-persist';
 import authReducer from '../app/features/auth/authSlice';
+import createExpirationTransform from '../app/features/auth/redux-persist-expire';
 
 const reducers = combineReducers({
   [authApi.reducerPath]: authApi.reducer,
   auth: authReducer
 });
 
+const userExpireTransform = createExpirationTransform({
+  expireKey: 'userExpirationDate',
+  defaultState: {
+    token: '',
+    userExpirationDate: '',
+    user: null
+  }
+});
+
 const persistConfig = {
   key: 'root',
+  transforms: [userExpireTransform],
   storage
 };
 
