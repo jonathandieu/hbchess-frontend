@@ -1,6 +1,7 @@
 import { Outlet, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
 import {
   PlayIcon,
   UsersIcon,
@@ -15,6 +16,7 @@ const LoggedInTemplate = () => {
   const { user } = useAuth();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const isDesktop = useMediaQuery({ query: '(min-width: 768px)' });
 
   useEffect(() => {
     if (!user) {
@@ -23,6 +25,14 @@ const LoggedInTemplate = () => {
   }, [user]);
 
   const sidebarRef = useRef(document.createElement('div'));
+  const mobileSidebarRef = useRef(document.createElement('div'));
+  const [sidebarWidth, setSidebarWidth] = useState(0);
+  const [mobileSidebarWidth, setMobileSidebarWidth] = useState(0);
+
+  useEffect(() => {
+    setSidebarWidth(sidebarRef.current.clientWidth);
+    setMobileSidebarWidth(mobileSidebarRef.current.clientHeight);
+  }, [sidebarRef.current, mobileSidebarRef.current]);
 
   const closeSidebar = () => {
     if (sidebarRef !== null) {
@@ -37,7 +47,10 @@ const LoggedInTemplate = () => {
 
   return (
     <div className="flex relative flex-col h-screen md:flex-row">
-      <div className="flex justify-between text-green-100 bg-green-800 md:hidden">
+      <div
+        ref={mobileSidebarRef}
+        className="flex justify-between text-green-100 bg-green-800 md:hidden"
+      >
         <a href="#" className="block p-4 font-bold text-white">
           HBChess
         </a>
@@ -163,8 +176,27 @@ const LoggedInTemplate = () => {
         </nav>
       </div>
 
-      <div className="flex-1 h-full bg-hero-pattern">
-        <Outlet />
+      <div className="flex-1 w-full h-full">
+        <div className="h-full bg-center bg-hero-pattern blur-sm" />
+        {isDesktop ? (
+          <div
+            className="absolute top-0 right-0 h-full"
+            style={{
+              width: `calc(100% - ${sidebarWidth}px)`
+            }}
+          >
+            <Outlet />
+          </div>
+        ) : (
+          <div
+            className="absolute right-0 bottom-0 w-full"
+            style={{
+              height: `calc(100% - ${mobileSidebarWidth}px)`
+            }}
+          >
+            <Outlet />
+          </div>
+        )}
       </div>
     </div>
   );
