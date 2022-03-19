@@ -115,7 +115,7 @@ function Register() {
               <div className="text-sm">
                 {'Already have an account? '}
                 <a
-                  href="#"
+                  href="/auth/login"
                   className="font-medium text-green-600 hover:text-green-500"
                 >
                   Sign In
