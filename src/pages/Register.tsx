@@ -5,6 +5,7 @@ import { RegisterRequest, useRegisterMutation } from '../app/services/authApi';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '../components/Spinner';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 function Register() {
   const navigate = useNavigate();
@@ -114,12 +115,12 @@ function Register() {
             <div className="flex justify-center">
               <div className="text-sm">
                 {'Already have an account? '}
-                <a
-                  href="/auth/login"
+                <Link
+                  to="/auth/login"
                   className="font-medium text-green-600 hover:text-green-500"
                 >
                   Sign In
-                </a>
+                </Link>
               </div>
             </div>
           </form>
