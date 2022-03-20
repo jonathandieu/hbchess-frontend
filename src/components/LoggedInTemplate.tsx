@@ -17,17 +17,16 @@ const LoggedInTemplate = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const isDesktop = useMediaQuery({ query: '(min-width: 768px)' });
+  const sidebarRef = useRef(document.createElement('div'));
+  const mobileSidebarRef = useRef(document.createElement('div'));
+  const [sidebarWidth, setSidebarWidth] = useState(0);
+  const [mobileSidebarWidth, setMobileSidebarWidth] = useState(0);
 
   useEffect(() => {
     if (!user) {
       navigate('/auth/login', { replace: true });
     }
   }, [user]);
-
-  const sidebarRef = useRef(document.createElement('div'));
-  const mobileSidebarRef = useRef(document.createElement('div'));
-  const [sidebarWidth, setSidebarWidth] = useState(0);
-  const [mobileSidebarWidth, setMobileSidebarWidth] = useState(0);
 
   useEffect(() => {
     setSidebarWidth(sidebarRef.current.clientWidth);
