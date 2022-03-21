@@ -1,16 +1,20 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { Link, useNavigate, Outlet } from 'react-router-dom';
+import { Outlet, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { useRef, useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import {
-  HomeIcon,
+  PlayIcon,
+  UsersIcon,
+  ChartSquareBarIcon,
   ViewListIcon,
-  UserAddIcon,
-  LoginIcon
+  LogoutIcon
 } from '@heroicons/react/outline';
+import { resetCredentials } from '../app/features/auth/authSlice';
+import { useAppDispatch } from '../hooks/store';
 
-const LoggedOutTemplate: React.FC = () => {
+const LoggedInTemplate = () => {
   const { user } = useAuth();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const isDesktop = useMediaQuery({ query: '(min-width: 768px)' });
   const sidebarRef = useRef(document.createElement('div'));
@@ -19,8 +23,8 @@ const LoggedOutTemplate: React.FC = () => {
   const [mobileSidebarWidth, setMobileSidebarWidth] = useState(0);
 
   useEffect(() => {
-    if (user) {
-      navigate('/dashboard', { replace: true });
+    if (!user) {
+      navigate('/auth/login', { replace: true });
     }
   }, [user]);
 
@@ -33,6 +37,11 @@ const LoggedOutTemplate: React.FC = () => {
     if (sidebarRef !== null) {
       sidebarRef.current.classList.add('-translate-x-full');
     }
+  };
+
+  const handleLogout = () => {
+    dispatch(resetCredentials());
+    navigate('/', { replace: true });
   };
 
   return (
@@ -72,10 +81,10 @@ const LoggedOutTemplate: React.FC = () => {
 
       <div
         ref={sidebarRef}
-        className="absolute inset-y-0 left-0 z-20 py-7 px-2 space-y-6 w-64 text-gray-100 bg-gray-800 transition duration-200 ease-in-out -translate-x-full md:relative md:translate-x-0"
+        className="flex absolute inset-y-0 left-0 z-10 flex-col py-7 px-2 space-y-6 w-64 text-gray-100 bg-gray-800 transition duration-200 ease-in-out -translate-x-full md:relative md:translate-x-0"
       >
         <Link
-          to="/"
+          to="/dashboard"
           className="flex items-center px-4 space-x-2 text-white"
           onClick={closeSidebar}
         >
@@ -96,22 +105,48 @@ const LoggedOutTemplate: React.FC = () => {
           <span className="text-2xl font-extrabold">HBChess</span>
         </Link>
 
-        <nav>
+        <nav className="flex flex-col flex-1">
           <Link
-            to="/"
+            to="/dashboard/play"
             className="flex flex-row py-2.5 px-4 hover:text-white hover:bg-green-700 rounded transition duration-200"
             onClick={closeSidebar}
           >
             <span className="flex items-center pr-2">
-              <HomeIcon
+              <PlayIcon
                 className="w-5 h-5 text-gray-50 group-hover:text-nyanza"
                 aria-hidden="true"
               />
             </span>
-            Home
+            Play Game
           </Link>
           <Link
-            to="/leaderboard"
+            to="/dashboard/teams"
+            className="flex flex-row py-2.5 px-4 hover:text-white hover:bg-green-700 rounded transition duration-200"
+            onClick={closeSidebar}
+          >
+            <span className="flex items-center pr-2">
+              <UsersIcon
+                className="w-5 h-5 text-gray-50 group-hover:text-nyanza"
+                aria-hidden="true"
+              />
+            </span>
+            Teams
+          </Link>
+          <Link
+            to="/dashboard/stats"
+            className="flex flex-row py-2.5 px-4 hover:text-white hover:bg-green-700 rounded transition duration-200"
+            onClick={closeSidebar}
+          >
+            <span className="flex items-center pr-2">
+              <ChartSquareBarIcon
+                className="w-5 h-5 text-gray-50 group-hover:text-nyanza"
+                aria-hidden="true"
+              />
+            </span>
+            My Stats
+          </Link>
+          <Link
+            to="/dashboard/leaderboard"
             className="flex flex-row py-2.5 px-4 hover:text-white hover:bg-green-700 rounded transition duration-200"
             onClick={closeSidebar}
           >
@@ -123,32 +158,20 @@ const LoggedOutTemplate: React.FC = () => {
             </span>
             Leaderboard
           </Link>
-          <Link
-            to="/auth/signup"
-            className="flex flex-row py-2.5 px-4 hover:text-white hover:bg-green-700 rounded transition duration-200"
-            onClick={closeSidebar}
-          >
-            <span className="flex items-center pr-2">
-              <UserAddIcon
-                className="w-5 h-5 text-gray-50 group-hover:text-nyanza"
-                aria-hidden="true"
-              />
-            </span>
-            Sign Up
-          </Link>
-          <Link
-            to="/auth/login"
-            className="flex flex-row py-2.5 px-4 hover:text-white hover:bg-green-700 rounded transition duration-200"
-            onClick={closeSidebar}
-          >
-            <span className="flex items-center pr-2">
-              <LoginIcon
-                className="w-5 h-5 text-gray-50 group-hover:text-nyanza"
-                aria-hidden="true"
-              />
-            </span>
-            Log In
-          </Link>
+          <div className="flex flex-1 items-end">
+            <button
+              className="flex flex-row py-2.5 px-4 w-full hover:text-white hover:bg-green-700 rounded transition duration-200"
+              onClick={handleLogout}
+            >
+              <span className="flex items-center pr-2">
+                <LogoutIcon
+                  className="w-5 h-5 text-gray-50 group-hover:text-nyanza"
+                  aria-hidden="true"
+                />
+              </span>
+              Sign Out
+            </button>
+          </div>
         </nav>
       </div>
 
@@ -178,4 +201,4 @@ const LoggedOutTemplate: React.FC = () => {
   );
 };
 
-export default LoggedOutTemplate;
+export default LoggedInTemplate;
