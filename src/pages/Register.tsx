@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { LockClosedIcon } from '@heroicons/react/solid';
 import { RegisterRequest, useRegisterMutation } from '../app/services/authApi';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Spinner from '../components/Spinner';
 import { toast } from 'react-toastify';
 
@@ -23,7 +23,7 @@ function Register() {
   const handleRegisterRequest = async () => {
     try {
       const response = await register(registerFormState).unwrap();
-      navigate('/login');
+      navigate('/auth/login');
       toast.success(response.message);
     } catch (err) {
       toast.error(err.data.message);
@@ -112,12 +112,12 @@ function Register() {
           <div className="flex justify-center">
             <div className="text-sm">
               {'Already have an account? '}
-              <a
-                href="#"
+              <Link
+                to="/auth/login"
                 className="font-medium text-green-600 hover:text-green-500"
               >
                 Sign In
-              </a>
+              </Link>
             </div>
           </div>
         </form>
