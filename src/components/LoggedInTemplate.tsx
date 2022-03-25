@@ -188,7 +188,7 @@ const LoggedInTemplate = () => {
           </div>
         ) : (
           <div
-            className="absolute right-0 bottom-0 w-full"
+            className="overflow-auto absolute right-0 bottom-0 w-full"
             style={{
               height: `calc(100% - ${mobileSidebarWidth}px)`
             }}

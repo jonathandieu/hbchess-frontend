@@ -1,10 +1,55 @@
+import TeammateSearch from '../components/TeammateSearch';
+import { useGetTeamsQuery, Team } from '../app/services/teamsApi';
 function Teams() {
+  const { data: teams } = useGetTeamsQuery();
+
+  const partition = (array: Array<Team>, isValid: (team: Team) => boolean) => {
+    const pass: Array<Team> = [];
+    const fail: Array<Team> = [];
+    array.forEach((element) => {
+      if (isValid(element)) {
+        pass.push(element);
+      } else {
+        fail.push(element);
+      }
+    });
+    return [pass, fail];
+  };
+
+  const [acceptedTeams, pendingTeams] = partition(
+    teams ?? [],
+    (team) => team.accepted
+  );
+
   return (
-    <div className="flex justify-center items-center w-full h-full">
-      <h1 className="font-serif text-5xl text-center text-green-500">
-        Welcome! <br />
-        Everything is Teams
-      </h1>
+    <div className="flex flex-col justify-center items-center p-4 space-y-4 w-full h-min md:h-full">
+      <TeammateSearch />
+      <div className="flex flex-col space-y-4 w-[90%] md:flex-row md:justify-between md:space-y-0 md:w-1/3">
+        <div className="p-8 h-min text-gray-100 bg-gray-800 rounded-lg shadow-2xl md:w-[calc(50%-10px)]">
+          <h1 className="py-4 text-3xl text-center">Incoming & Pending:</h1>
+          <ol className="space-y-4 text-xl font-medium list-disc">
+            {pendingTeams.map((team) => {
+              return (
+                <li className="" key={team._id}>
+                  {team.recipient}
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+        <div className="p-8 h-min text-gray-100 bg-gray-800 rounded-lg shadow-2xl md:w-[calc(50%-10px)]">
+          <h1 className="py-4 text-3xl text-center">Your Teammates:</h1>
+          <ol className="space-y-4 text-xl font-medium list-disc">
+            {acceptedTeams.map((team) => {
+              return (
+                <li className="" key={team._id}>
+                  {team.recipient}
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+      </div>
     </div>
   );
 }
