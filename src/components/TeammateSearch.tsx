@@ -2,9 +2,15 @@ import { Fragment, useState } from 'react';
 import { Combobox, Transition } from '@headlessui/react';
 import { CheckIcon, SearchIcon } from '@heroicons/react/solid';
 import { useSearchQuery } from '../app/services/usersApi';
+import { useCreateTeamMutation } from '../app/services/teamsApi';
+import { toast } from 'react-toastify';
+import Spinner from '../components/Spinner';
 
 const TeammateSearch = () => {
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState<{
+    id: string;
+    username: string;
+  } | null>(null);
   const [searchParam, setSearchParam] = useState<string>('');
 
   const { currentData: users = [], isFetching } = useSearchQuery(
@@ -14,6 +20,22 @@ const TeammateSearch = () => {
       skip: searchParam.trim() === ''
     }
   );
+  const [createTeam, { isLoading }] = useCreateTeamMutation();
+
+  const handleCreateTeam = async () => {
+    try {
+      await createTeam({
+        username: selected?.username ?? ''
+      }).unwrap();
+      setSearchParam('');
+      setSelected(null);
+      toast.dismiss();
+    } catch (err) {
+      toast.error(err.data.message);
+      setSearchParam('');
+      setSelected(null);
+    }
+  };
 
   return (
     <div className="p-8 w-[90%] text-gray-100 bg-gray-800 rounded-lg shadow-2xl md:w-1/3">
@@ -103,8 +125,11 @@ const TeammateSearch = () => {
         </div>
       </Combobox>
       <div className="flex justify-center pt-4 w-full">
-        <button className="flex flex-row py-2.5 px-4 hover:text-white bg-green-600 hover:bg-green-700 rounded transition duration-200">
-          Send Request
+        <button
+          className="flex flex-row justify-center items-center py-2.5 px-4 w-44 h-12 text-center hover:text-white bg-green-600 hover:bg-green-700 rounded transition duration-200"
+          onClick={handleCreateTeam}
+        >
+          {isLoading ? <Spinner /> : <p>Send Request</p>}
         </button>
       </div>
     </div>

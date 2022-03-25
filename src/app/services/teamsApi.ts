@@ -11,12 +11,11 @@ export interface Team {
 }
 
 export interface CreateTeamRequest {
-  sender: string;
-  recipient: string;
+  username: string;
 }
 
-export interface SearchUserResponse {
-  users: Array<Team>;
+export interface AcceptTeamRequest {
+  username: string;
 }
 
 const baseUrl =
@@ -36,19 +35,34 @@ export const teamsApi = createApi({
       return headers;
     }
   }),
+  tagTypes: ['Teams'],
   endpoints: (builder) => ({
     getTeams: builder.query<Team[], void>({
       transformResponse: (response: { teams: Team[] }) => response.teams,
+      providesTags: ['Teams'],
       query: () => 'getTeams'
     }),
     createTeam: builder.mutation<Team, CreateTeamRequest>({
-      query: (userIds) => ({
-        url: `createTeam`,
+      invalidatesTags: ['Teams'],
+      query: (createTeamBody) => ({
+        url: 'create',
         method: 'POST',
-        body: userIds
+        body: createTeamBody
+      })
+    }),
+    acceptTeam: builder.mutation<Team, AcceptTeamRequest>({
+      invalidatesTags: ['Teams'],
+      query: (acceptTeamBody) => ({
+        url: 'accept',
+        method: 'PUT',
+        body: acceptTeamBody
       })
     })
   })
 });
 
-export const { useGetTeamsQuery, useCreateTeamMutation } = teamsApi;
+export const {
+  useGetTeamsQuery,
+  useCreateTeamMutation,
+  useAcceptTeamMutation
+} = teamsApi;
