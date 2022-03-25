@@ -7,9 +7,13 @@ const TeammateSearch = () => {
   const [selected, setSelected] = useState(null);
   const [searchParam, setSearchParam] = useState<string>('');
 
-  const { currentData: users = [], isFetching } = useSearchQuery(searchParam, {
-    refetchOnMountOrArgChange: true
-  });
+  const { currentData: users = [], isFetching } = useSearchQuery(
+    searchParam.trim(),
+    {
+      refetchOnMountOrArgChange: true,
+      skip: searchParam.trim() === ''
+    }
+  );
 
   return (
     <div className="p-8 w-[90%] text-gray-100 bg-gray-800 rounded-lg shadow-2xl md:w-1/3">
@@ -22,7 +26,6 @@ const TeammateSearch = () => {
               displayValue={(user: { id: number; username: string }) =>
                 user ? user.username : ''
               }
-              // onChange={(event) => setQuery(event.target.value)}
               onChange={(event) => {
                 setSearchParam(event.target.value);
               }}
