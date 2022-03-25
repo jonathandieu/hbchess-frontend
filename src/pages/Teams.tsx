@@ -1,8 +1,10 @@
 import TeammateSearch from '../components/TeammateSearch';
 import { useGetTeamsQuery, Team } from '../app/services/teamsApi';
+import { useAuth } from '../hooks/useAuth';
+
 function Teams() {
   const { data: teams } = useGetTeamsQuery();
-
+  const { user } = useAuth();
   const partition = (array: Array<Team>, isValid: (team: Team) => boolean) => {
     const pass: Array<Team> = [];
     const fail: Array<Team> = [];
@@ -31,7 +33,19 @@ function Teams() {
             {pendingTeams.map((team) => {
               return (
                 <li className="" key={team._id}>
-                  {team.recipient}
+                  {user?.id === team.sender ? (
+                    <div className="flex flex-row justify-between">
+                      {team.recipientUsername}
+                      <span className="text-lg text-gray-200">Pending</span>
+                    </div>
+                  ) : (
+                    <div className="flex flex-row justify-between">
+                      {team.senderUsername}
+                      <button className="py-1.5 px-4 text-lg hover:text-white bg-green-600 hover:bg-green-700 rounded transition duration-200">
+                        Accept
+                      </button>
+                    </div>
+                  )}
                 </li>
               );
             })}
@@ -43,7 +57,9 @@ function Teams() {
             {acceptedTeams.map((team) => {
               return (
                 <li className="" key={team._id}>
-                  {team.recipient}
+                  {user?.id === team.sender
+                    ? team.recipientUsername
+                    : team.senderUsername}
                 </li>
               );
             })}

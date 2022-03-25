@@ -1,6 +1,6 @@
 import { Fragment, useState } from 'react';
 import { Combobox, Transition } from '@headlessui/react';
-import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
+import { CheckIcon, SearchIcon } from '@heroicons/react/solid';
 import { useSearchQuery } from '../app/services/usersApi';
 
 const TeammateSearch = () => {
@@ -31,7 +31,7 @@ const TeammateSearch = () => {
               }}
             />
             <Combobox.Button className="flex absolute inset-y-0 right-0 items-center pr-2">
-              <SelectorIcon
+              <SearchIcon
                 className="w-5 h-5 text-gray-400"
                 aria-hidden="true"
               />

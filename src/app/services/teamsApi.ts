@@ -4,7 +4,9 @@ import { RootState } from '../store';
 export interface Team {
   _id: string;
   sender: string;
+  senderUsername: string;
   recipient: string;
+  recipientUsername: string;
   accepted: boolean;
 }
 
