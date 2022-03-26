@@ -10,6 +10,11 @@ export interface Team {
   accepted: boolean;
 }
 
+export interface GetTeamsResponse {
+  acceptedTeams: Team[];
+  pendingTeams: Team[];
+}
+
 export interface CreateTeamRequest {
   username: string;
 }
@@ -37,10 +42,13 @@ export const teamsApi = createApi({
   }),
   tagTypes: ['Teams'],
   endpoints: (builder) => ({
-    getTeams: builder.query<Team[], void>({
-      transformResponse: (response: { teams: Team[] }) => response.teams,
+    getTeams: builder.query<GetTeamsResponse, void>({
+      transformResponse: (response: { team: Team[]; teamNot: Team[] }) => ({
+        acceptedTeams: response.team,
+        pendingTeams: response.teamNot
+      }),
       providesTags: ['Teams'],
-      query: () => 'getTeams'
+      query: () => 'get'
     }),
     createTeam: builder.mutation<Team, CreateTeamRequest>({
       invalidatesTags: ['Teams'],

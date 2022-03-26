@@ -1,7 +1,6 @@
 import {
   useGetTeamsQuery,
-  useAcceptTeamMutation,
-  Team
+  useAcceptTeamMutation
 } from '../app/services/teamsApi';
 import { useAuth } from '../hooks/useAuth';
 import { toast } from 'react-toastify';
@@ -12,30 +11,17 @@ const TeamsLists = () => {
   const [acceptTeam, { isLoading }] = useAcceptTeamMutation();
   const { user } = useAuth();
 
-  const partition = (array: Array<Team>, isValid: (team: Team) => boolean) => {
-    const pass: Array<Team> = [];
-    const fail: Array<Team> = [];
-    array.forEach((element) => {
-      if (isValid(element)) {
-        pass.push(element);
-      } else {
-        fail.push(element);
-      }
-    });
-    return [pass, fail];
-  };
-
-  const [acceptedTeams, pendingTeams] = partition(
-    teams ?? [],
-    (team) => team.accepted
-  );
-
   const handleAcceptTeam = async (username: string) => {
     try {
       await acceptTeam({ username }).unwrap();
     } catch (err) {
       toast.error(err.data.message);
     }
+  };
+
+  const { acceptedTeams, pendingTeams } = teams || {
+    acceptedTeams: [],
+    pendingTeams: []
   };
 
   return (
