@@ -1,10 +1,10 @@
+import TeammateSearch from '../components/TeammateSearch';
+import TeamsLists from '../components/TeamsLists';
 function Teams() {
   return (
-    <div className="flex justify-center items-center w-full h-full">
-      <h1 className="font-serif text-5xl text-center text-green-500">
-        Welcome! <br />
-        Everything is Teams
-      </h1>
+    <div className="flex flex-col justify-center items-center p-4 space-y-4 w-full h-min md:h-full">
+      <TeammateSearch />
+      <TeamsLists />
     </div>
   );
 }

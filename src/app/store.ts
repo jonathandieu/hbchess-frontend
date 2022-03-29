@@ -1,13 +1,17 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { authApi } from './services/authApi';
+import { usersApi } from './services/usersApi';
+import { teamsApi } from './services/teamsApi';
 import storage from 'redux-persist/lib/storage';
 import { combineReducers } from 'redux';
 import { persistReducer } from 'redux-persist';
-import authReducer from '../app/features/auth/authSlice';
-import createExpirationTransform from '../app/features/auth/redux-persist-expire';
+import authReducer from './features/auth/authSlice';
+import createExpirationTransform from './redux-persist-expire';
 
 const reducers = combineReducers({
   [authApi.reducerPath]: authApi.reducer,
+  [usersApi.reducerPath]: usersApi.reducer,
+  [teamsApi.reducerPath]: teamsApi.reducer,
   auth: authReducer
 });
 
@@ -22,6 +26,7 @@ const userExpireTransform = createExpirationTransform({
 
 const persistConfig = {
   key: 'root',
+  blacklist: [teamsApi.reducerPath, usersApi.reducerPath],
   transforms: [userExpireTransform],
   storage
 };
@@ -33,7 +38,9 @@ export const store = configureStore({
   devTools: process.env.NODE_ENV !== 'production',
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }).concat(
-      authApi.middleware
+      authApi.middleware,
+      teamsApi.middleware,
+      usersApi.middleware
     )
 });
 
