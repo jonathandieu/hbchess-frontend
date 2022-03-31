@@ -1,40 +1,45 @@
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { Combobox, Transition } from '@headlessui/react';
 import { CheckIcon, SearchIcon } from '@heroicons/react/solid';
-import { useGetTeamsQuery } from '../app/services/teamsApi';
-import { useAuth } from '../hooks/useAuth';
-import { useState } from 'react';
+import { useSearchQuery } from '../app/services/usersApi';
+import { useCreateTeamMutation } from '../app/services/teamsApi';
+import { toast } from 'react-toastify';
+import Spinner from '../components/Spinner';
 
-export type SelectedValue = { id: string; username: string } | null;
-
-interface TeammateSearchProps {
-  selected: SelectedValue;
-  setSelected: (selected: SelectedValue) => void;
-}
-
-const TeammateSearch = ({ selected, setSelected }: TeammateSearchProps) => {
-  const { data: teams = { acceptedTeams: [] }, isFetching } =
-    useGetTeamsQuery();
-  const { user } = useAuth();
+const UsersSearch = () => {
+  const [selected, setSelected] = useState<{
+    id: string;
+    username: string;
+  } | null>(null);
   const [searchParam, setSearchParam] = useState<string>('');
 
-  const { acceptedTeams } = teams;
+  const { currentData: users = [], isFetching } = useSearchQuery(
+    searchParam.trim(),
+    {
+      refetchOnMountOrArgChange: true,
+      skip: searchParam.trim() === ''
+    }
+  );
+  const [createTeam, { isLoading }] = useCreateTeamMutation();
 
-  const users: Array<{ id: string; username: string }> = acceptedTeams
-    .map((team) => {
-      if (team.sender === user?.id) {
-        return { id: team.recipient, username: team.recipientUsername };
-      } else {
-        return { id: team.sender, username: team.senderUsername };
-      }
-    })
-    .filter((teammate) => {
-      return teammate.username.toLowerCase().includes(searchParam);
-    });
+  const handleCreateTeam = async () => {
+    try {
+      await createTeam({
+        username: selected?.username ?? ''
+      }).unwrap();
+      setSearchParam('');
+      setSelected(null);
+      toast.dismiss();
+    } catch (err) {
+      toast.error(err.data.message);
+      setSearchParam('');
+      setSelected(null);
+    }
+  };
 
   return (
-    <div className="p-8">
-      <h1 className="py-4 text-xl">Pick A Teammate:</h1>
+    <div className="p-8 w-[90%] text-gray-100 bg-gray-800 rounded-lg shadow-2xl md:w-1/3">
+      <h1 className="py-4 text-4xl">Search for Teammate:</h1>
       <Combobox value={selected} onChange={setSelected}>
         <div className="relative mt-1">
           <div className="overflow-hidden relative w-full text-left bg-white rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300/75 shadow-md cursor-default sm:text-sm">
@@ -119,8 +124,16 @@ const TeammateSearch = ({ selected, setSelected }: TeammateSearchProps) => {
           </Transition>
         </div>
       </Combobox>
+      <div className="flex justify-center pt-4 w-full">
+        <button
+          className="flex flex-row justify-center items-center py-2.5 px-4 w-44 h-12 text-center hover:text-white bg-green-600 hover:bg-green-700 rounded transition duration-200"
+          onClick={handleCreateTeam}
+        >
+          {isLoading ? <Spinner /> : <p>Send Request</p>}
+        </button>
+      </div>
     </div>
   );
 };
 
-export default TeammateSearch;
+export default UsersSearch;
