@@ -23,6 +23,11 @@ export interface AcceptTeamRequest {
   username: string;
 }
 
+export interface GetAllTeamsRequest {
+  limit: number;
+  offset: number;
+}
+
 const baseUrl =
   process.env.NODE_ENV === 'production'
     ? 'https://hbchess.app/api/teams'
@@ -65,6 +70,9 @@ export const teamsApi = createApi({
         method: 'PUT',
         body: acceptTeamBody
       })
+    }),
+    getAllTeams: builder.query<Team[], GetAllTeamsRequest>({
+      query: ({ limit, offset }) => `all?limit=${limit}&offset=${offset}`
     })
   })
 });
@@ -72,5 +80,6 @@ export const teamsApi = createApi({
 export const {
   useGetTeamsQuery,
   useCreateTeamMutation,
-  useAcceptTeamMutation
+  useAcceptTeamMutation,
+  useGetAllTeamsQuery
 } = teamsApi;

@@ -5,7 +5,11 @@ import { useGetTeamsQuery } from '../app/services/teamsApi';
 import { useAuth } from '../hooks/useAuth';
 import { useState } from 'react';
 
-export type SelectedValue = { id: string; username: string } | null;
+export type SelectedValue = {
+  teamId: string;
+  teammateId: string;
+  username: string;
+} | null;
 
 interface TeammateSearchProps {
   selected: SelectedValue;
@@ -20,17 +24,26 @@ const TeammateSearch = ({ selected, setSelected }: TeammateSearchProps) => {
 
   const { acceptedTeams } = teams;
 
-  const users: Array<{ id: string; username: string }> = acceptedTeams
-    .map((team) => {
-      if (team.sender === user?.id) {
-        return { id: team.recipient, username: team.recipientUsername };
-      } else {
-        return { id: team.sender, username: team.senderUsername };
-      }
-    })
-    .filter((teammate) => {
-      return teammate.username.toLowerCase().includes(searchParam);
-    });
+  const users: Array<{ teamId: string; teammateId: string; username: string }> =
+    acceptedTeams
+      .map((team) => {
+        if (team.sender === user?.id) {
+          return {
+            teamId: team._id,
+            teammateId: team.recipient,
+            username: team.recipientUsername
+          };
+        } else {
+          return {
+            teamId: team._id,
+            teammateId: team.sender,
+            username: team.senderUsername
+          };
+        }
+      })
+      .filter((teammate) => {
+        return teammate.username.toLowerCase().includes(searchParam);
+      });
 
   return (
     <div className="p-8">
@@ -84,7 +97,7 @@ const TeammateSearch = ({ selected, setSelected }: TeammateSearchProps) => {
               ) : (
                 users.map((user, index) => (
                   <Combobox.Option
-                    key={user.id ?? index}
+                    key={user.teamId ?? index}
                     className={({ active }) =>
                       `cursor-default select-none relative py-2 pl-10 pr-4 ${
                         active ? 'text-white bg-teal-600' : 'text-gray-900'
