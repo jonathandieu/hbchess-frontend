@@ -4,12 +4,11 @@ import TeammateSearch from './TeammateSearch';
 import OpponentTeamSearch from './OpponentTeamSearch';
 import { Team } from '../app/services/teamsApi';
 import { useCreateGameMutation } from '../app/services/gameApi';
+import { toast } from 'react-toastify';
+import { setInGame } from '../app/features/game/gameSlice';
+import { useAppDispatch } from '../hooks/store';
 
-interface CreateGameDialogProps {
-  setJoined: (value: boolean) => void;
-}
-
-const CreateGameDialog = ({ setJoined }: CreateGameDialogProps) => {
+const CreateGameDialog = () => {
   const [selectedTeammate, setSelectedTeammate] = useState<{
     teamId: string;
     teammateId: string;
@@ -21,20 +20,22 @@ const CreateGameDialog = ({ setJoined }: CreateGameDialogProps) => {
   );
   const [createGame] = useCreateGameMutation();
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useAppDispatch();
 
   function closeModal() {
     setIsOpen(false);
   }
 
-  const handleCreateGame = () => {
+  const handleCreateGame = async () => {
     try {
-      createGame({
-        hostTeamId: selectedTeammate?.teamId ?? '',
-        guestTeamId: selectedOpponentTeam?._id ?? ''
-      });
-      setJoined(true);
+      const result = await createGame({
+        whiteId: selectedTeammate?.teamId ?? '',
+        blackId: selectedOpponentTeam?._id ?? ''
+      }).unwrap();
+      console.log(result);
+      dispatch(setInGame({ roomId: 'TEST ROOM' }));
     } catch (err) {
-      console.log(err);
+      toast.error(err);
     }
   };
 

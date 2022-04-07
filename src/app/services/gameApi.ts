@@ -2,13 +2,21 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RootState } from '../store';
 import { Team } from './teamsApi';
 interface Game {
-  hostTeam: Team;
-  guestTeam: Team;
+  _id: string;
+  white: Team;
+  black: Team;
+  moves: string;
+  result: string;
 }
 
 interface CreateGameRequest {
-  hostTeamId: string;
-  guestTeamId: string;
+  whiteId: string;
+  blackId: string;
+}
+
+interface CreateGameResponse {
+  message: string;
+  game: Game;
 }
 
 const baseUrl =
@@ -30,9 +38,18 @@ export const gameApi = createApi({
   }),
   endpoints: (builder) => ({
     getGames: builder.query<Game[], void>({
+      transformResponse: (
+        response: Game[] | { message: string; stack: string | null }
+      ) => {
+        if (Array.isArray(response)) {
+          return response;
+        } else {
+          return [];
+        }
+      },
       query: () => 'get'
     }),
-    createGame: builder.mutation<void, CreateGameRequest>({
+    createGame: builder.mutation<CreateGameResponse, CreateGameRequest>({
       query: (createGameBody) => ({
         url: 'create',
         method: 'POST',

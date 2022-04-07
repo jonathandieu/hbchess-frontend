@@ -24,11 +24,11 @@ const OpponentTeamSearch = ({
 
   const teams: Array<Team> = allTeams.filter((team) => {
     const target =
-      `${team.senderUsername} - ${team.recipientUsername}`.toLowerCase();
+      `${team.sender.username} - ${team.recipient.username}`.toLowerCase();
     return (
       target.includes(searchParam.toLowerCase()) &&
-      team.sender !== user?.id &&
-      team.recipient !== user?.id
+      team.sender._id !== user?.id &&
+      team.recipient._id !== user?.id
     );
   });
 
@@ -43,7 +43,7 @@ const OpponentTeamSearch = ({
                 className="py-2 pr-10 pl-3 w-full text-sm leading-5 text-gray-900 border-none focus:ring-0"
                 displayValue={(team: Team) =>
                   team
-                    ? `${team.senderUsername} - ${team.recipientUsername}`
+                    ? `${team.sender.username} - ${team.recipient.username}`
                     : ''
                 }
                 onChange={(event) => {
@@ -102,7 +102,7 @@ const OpponentTeamSearch = ({
                               selected ? 'font-medium' : 'font-normal'
                             }`}
                           >
-                            {team.senderUsername} - {team.recipientUsername}
+                            {team.sender.username} - {team.recipient.username}
                           </span>
                           {selected ? (
                             <span

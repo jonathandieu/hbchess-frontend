@@ -9,6 +9,7 @@ import storage from 'redux-persist/lib/storage';
 import { combineReducers } from 'redux';
 import { persistReducer } from 'redux-persist';
 import authReducer from './features/auth/authSlice';
+import gameReducer from './features/game/gameSlice';
 import createExpirationTransform from './redux-persist-expire';
 
 const reducers = combineReducers({
@@ -17,7 +18,8 @@ const reducers = combineReducers({
   [teamsApi.reducerPath]: teamsApi.reducer,
   [socketApi.reducerPath]: socketApi.reducer,
   [gameApi.reducerPath]: gameApi.reducer,
-  auth: authReducer
+  auth: authReducer,
+  game: gameReducer
 });
 
 const userExpireTransform = createExpirationTransform({

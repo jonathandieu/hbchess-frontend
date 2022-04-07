@@ -1,13 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { io, Socket } from 'socket.io-client';
 
-export interface CreateGameRequest {
-  username: string;
-  teammate: string;
-  roomId: string;
-  token: string;
-}
-
 const baseUrl =
   process.env.NODE_ENV === 'production'
     ? 'https://hbchess.app/api/socket.io'
@@ -36,55 +29,18 @@ export const socketApi = createApi({
   reducerPath: 'socketApi',
   baseQuery: fetchBaseQuery({ baseUrl: baseUrl }),
   endpoints: (builder) => ({
-    getGames: builder.query<Array<[string, [string]]>, string>({
-      queryFn: () => ({ data: [] }),
-      async onCacheEntryAdded(
-        token,
-        { cacheDataLoaded, cacheEntryRemoved, updateCachedData }
-      ) {
-        try {
-          await cacheDataLoaded;
-
-          const socket = getSocket(token);
-          socket.emit('request_games', (games: Array<[string, [string]]>) => {
-            updateCachedData((draft) => {
-              draft = games;
-              return draft;
-            });
-          });
-
-          await cacheEntryRemoved;
-
-          socket.off('available_games');
-        } catch {
-          // if cacheEntryRemoved resolved before cacheDataLoaded,
-          // cacheDataLoaded throws
-        }
-      }
-    }),
-    createGame: builder.mutation<[string, [string]], CreateGameRequest>({
-      queryFn: ({ token, ...createGameRequest }: CreateGameRequest) => {
+    // eslint-disable-next-line prettier/prettier
+    joinGame: builder.mutation<{ message: string }, { token: string; roomId: string }>({
+      queryFn: ({ token, roomId }: { token: string; roomId: string }) => {
         const socket = getSocket(token);
         return new Promise((resolve) => {
-          socket.emit(
-            'join_game',
-            createGameRequest,
-            (game: [string, [string]]) => {
-              resolve({ data: game });
-            }
+          socket.emit('join_game', roomId, (message: string) =>
+            resolve({ data: { message } })
           );
-
-          socket.on('room_emit_error', () => {
-            console.log('ERROR');
-          });
-
-          socket.on('room_joined', () => {
-            console.log('ROOM JOINED');
-          });
         });
       }
     })
   })
 });
 
-export const { useGetGamesQuery, useCreateGameMutation } = socketApi;
+export const { useJoinGameMutation } = socketApi;

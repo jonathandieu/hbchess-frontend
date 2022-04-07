@@ -38,8 +38,8 @@ const UsersSearch = () => {
   };
 
   return (
-    <div className="p-8 w-[90%] text-gray-100 bg-gray-800 rounded-lg shadow-2xl md:w-1/3">
-      <h1 className="py-4 text-4xl">Search for Teammate:</h1>
+    <div className="p-8 w-[90%] text-gray-100 bg-gray-800 rounded-lg shadow-2xl xl:w-2/3 2xl:w-1/3">
+      <h1 className="py-4 text-2xl 2xl:text-4xl">Search for Teammate:</h1>
       <Combobox value={selected} onChange={setSelected}>
         <div className="relative mt-1">
           <div className="overflow-hidden relative w-full text-left bg-white rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300/75 shadow-md cursor-default sm:text-sm">
@@ -89,7 +89,7 @@ const UsersSearch = () => {
               ) : (
                 users.map((user, index) => (
                   <Combobox.Option
-                    key={user.id ?? index}
+                    key={user._id ?? index}
                     className={({ active }) =>
                       `cursor-default select-none relative py-2 pl-10 pr-4 ${
                         active ? 'text-white bg-teal-600' : 'text-gray-900'

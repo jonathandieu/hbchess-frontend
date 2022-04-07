@@ -27,17 +27,17 @@ const TeammateSearch = ({ selected, setSelected }: TeammateSearchProps) => {
   const users: Array<{ teamId: string; teammateId: string; username: string }> =
     acceptedTeams
       .map((team) => {
-        if (team.sender === user?.id) {
+        if (team.sender._id === user?.id) {
           return {
             teamId: team._id,
-            teammateId: team.recipient,
-            username: team.recipientUsername
+            teammateId: team.recipient._id,
+            username: team.recipient.username
           };
         } else {
           return {
             teamId: team._id,
-            teammateId: team.sender,
-            username: team.senderUsername
+            teammateId: team.sender._id,
+            username: team.sender.username
           };
         }
       })

@@ -1,12 +1,16 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RootState } from '../store';
+import { User } from './usersApi';
 
 export interface Team {
   _id: string;
-  sender: string;
-  senderUsername: string;
-  recipient: string;
-  recipientUsername: string;
+  sender: User;
+  recipient: User;
+  matches: number;
+  wins: number;
+  losses: number;
+  ties: number;
+  name: string;
   accepted: boolean;
 }
 
