@@ -3,10 +3,14 @@ import { useGetGamesQuery } from '../app/services/gameApi';
 import { useAuth } from '../hooks/useAuth';
 import { useInGame } from '../hooks/useInGame';
 import Game from '../components/Game';
+import { setInGame } from '../app/features/game/gameSlice';
+import { useAppDispatch } from '../hooks/store';
+
 function Play() {
   const { token } = useAuth();
   const { data: games = [] } = useGetGamesQuery(token);
   const { inGame } = useInGame();
+  const dispatch = useAppDispatch();
 
   if (inGame) {
     return <Game />;
@@ -32,7 +36,12 @@ function Play() {
                         {game.black.sender.username} -{' '}
                         {game.black.recipient.username}
                       </p>
-                      <button className="flex justify-center items-center py-1.5 px-4 w-32 h-10 text-lg font-medium text-center bg-green-600 hover:bg-green-700 rounded transition duration-200">
+                      <button
+                        className="flex justify-center items-center py-1.5 px-4 w-32 h-10 text-lg font-medium text-center bg-green-600 hover:bg-green-700 rounded transition duration-200"
+                        onClick={() => {
+                          dispatch(setInGame({ game }));
+                        }}
+                      >
                         Join Game
                       </button>
                     </div>

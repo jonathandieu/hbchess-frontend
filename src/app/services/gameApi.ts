@@ -1,7 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RootState } from '../store';
 import { Team } from './teamsApi';
-interface Game {
+
+export interface Game {
   _id: string;
   white: Team;
   black: Team;

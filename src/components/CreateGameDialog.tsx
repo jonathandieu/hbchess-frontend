@@ -32,7 +32,7 @@ const CreateGameDialog = () => {
         whiteId: selectedTeammate?.teamId ?? '',
         blackId: selectedOpponentTeam?._id ?? ''
       }).unwrap();
-      dispatch(setInGame({ roomId: result.game._id }));
+      dispatch(setInGame({ game: result.game }));
     } catch (err) {
       toast.error(err);
     }

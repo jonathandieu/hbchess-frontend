@@ -34,7 +34,7 @@ export const socketApi = createApi({
       queryFn: ({ token, roomId }: { token: string; roomId: string }) => {
         const socket = getSocket(token);
         return new Promise((resolve) => {
-          socket.emit('join_game', roomId, (message: string) =>
+          socket.emit('join_game', { roomId }, (message: string) =>
             resolve({ data: { message } })
           );
         });
