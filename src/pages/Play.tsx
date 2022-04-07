@@ -2,20 +2,14 @@ import CreateGameDialog from '../components/CreateGameDialog';
 import { useGetGamesQuery } from '../app/services/gameApi';
 import { useAuth } from '../hooks/useAuth';
 import { useInGame } from '../hooks/useInGame';
-
+import Game from '../components/Game';
 function Play() {
   const { token } = useAuth();
   const { data: games = [] } = useGetGamesQuery(token);
   const { inGame } = useInGame();
 
   if (inGame) {
-    return (
-      <div className="flex justify-center items-center w-full h-full">
-        <h1 className="pb-2 mb-7 w-full text-3xl text-center">
-          Waiting for players to join
-        </h1>
-      </div>
-    );
+    return <Game />;
   }
 
   return (
