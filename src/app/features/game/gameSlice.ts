@@ -11,6 +11,7 @@ export interface GameState {
   black: Team | null;
   playerTurn: number;
   board: Array<Array<{ type: PieceType; color: 'w' | 'b' } | null>>;
+  playersIn: Array<string>;
   result: string;
   isWhite: boolean;
   isHand: boolean;
@@ -23,6 +24,7 @@ const initialState: GameState = {
   black: null,
   playerTurn: 0,
   board: [],
+  playersIn: [],
   result: '',
   isWhite: false,
   isHand: false
@@ -64,19 +66,20 @@ export const gameSlice = createSlice({
             (game.black.recipient._id === id && !game.isBlackSenderHand)));
     },
     resetGame: (state) => {
-      state.inGame = false;
-      state.roomId = '';
-      state.white = null;
-      state.black = null;
-      state.playerTurn = 0;
-      state.board = [];
-      state.isWhite = false;
-      state.isHand = false;
+      state = initialState;
+
+      return state;
+    },
+    addJoinedPlayer: (
+      state,
+      { payload: { playerIds } }: PayloadAction<{ playerIds: Array<string> }>
+    ) => {
+      state.playersIn = playerIds;
     }
   }
 });
 
-export const { setInGame, resetGame } = gameSlice.actions;
+export const { setInGame, resetGame, addJoinedPlayer } = gameSlice.actions;
 
 export default gameSlice.reducer;
 
@@ -90,6 +93,7 @@ export const selectGameState = (state: RootState) => ({
   black: state.game.black,
   playerTurn: state.game.playerTurn,
   board: state.game.board,
+  playersIn: state.game.playersIn,
   isWhite: state.game.isWhite,
   isHand: state.game.isHand
 });

@@ -8,17 +8,57 @@ const Sidebar = () => {
       <div className="flex flex-row justify-around items-center py-4 w-full border-b-2">
         <h1 className="text-2xl text-center text-gray-100">White:</h1>
         <ol className="w-min text-xl list-disc text-gray-100">
-          <li>{gameState.white.sender.username}</li>
-          <li>{gameState.white.recipient.username}</li>
+          <li
+            className={`${
+              gameState.playersIn.includes(gameState.white.sender._id)
+                ? 'text-green-600'
+                : 'text-red-600'
+            }`}
+          >
+            {gameState.white.sender.username}
+          </li>
+          <li
+            className={`${
+              gameState.playersIn.includes(gameState.white.recipient._id)
+                ? 'text-green-600'
+                : 'text-red-600'
+            }`}
+          >
+            {gameState.white.recipient.username}
+          </li>
         </ol>
       </div>
 
       <div className="flex flex-row justify-around items-center py-4 w-full border-b-2">
         <h1 className="text-2xl text-center text-gray-100">Black:</h1>
         <ol className="w-min text-xl list-disc text-gray-100">
-          <li>{gameState.black.sender.username}</li>
-          <li>{gameState.black.recipient.username}</li>
+          <li
+            className={`${
+              gameState.playersIn.includes(gameState.black.sender._id)
+                ? 'text-green-600'
+                : 'text-red-600'
+            }`}
+          >
+            {gameState.black.sender.username}
+          </li>
+          <li
+            className={`${
+              gameState.playersIn.includes(gameState.black.recipient._id)
+                ? 'text-green-600'
+                : 'text-red-600'
+            }`}
+          >
+            {gameState.black.recipient.username}
+          </li>
         </ol>
+      </div>
+
+      <div className="flex flex-col flex-1 justify-center items-center">
+        {gameState.playersIn.length === 4 ? null : (
+          <h1 className="text-2xl font-medium text-gray-100">
+            Waiting for all players to join.
+          </h1>
+        )}
       </div>
     </div>
   );
