@@ -7,7 +7,7 @@ import { setInGame } from '../app/features/game/gameSlice';
 import { useAppDispatch } from '../hooks/store';
 
 function Play() {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const { data: games = [] } = useGetGamesQuery(token);
   const { inGame } = useInGame();
   const dispatch = useAppDispatch();
@@ -39,7 +39,7 @@ function Play() {
                       <button
                         className="flex justify-center items-center py-1.5 px-4 w-32 h-10 text-lg font-medium text-center bg-green-600 hover:bg-green-700 rounded transition duration-200"
                         onClick={() => {
-                          dispatch(setInGame({ game }));
+                          dispatch(setInGame({ game, id: user?.id ?? '' }));
                         }}
                       >
                         Join Game

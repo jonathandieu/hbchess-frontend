@@ -12,6 +12,8 @@ export interface GameState {
   playerTurn: number;
   board: Array<Array<{ type: PieceType; color: 'w' | 'b' } | null>>;
   result: string;
+  isWhite: boolean;
+  isHand: boolean;
 }
 
 const initialState: GameState = {
@@ -21,7 +23,9 @@ const initialState: GameState = {
   black: null,
   playerTurn: 0,
   board: [],
-  result: ''
+  result: '',
+  isWhite: false,
+  isHand: false
 };
 
 let chess: ChessInstance;
@@ -39,7 +43,7 @@ export const gameSlice = createSlice({
   reducers: {
     setInGame: (
       state,
-      { payload: { game } }: PayloadAction<{ game: Game }>
+      { payload: { game, id } }: PayloadAction<{ game: Game; id: string }>
     ) => {
       state.inGame = true;
       state.roomId = game._id;
@@ -47,6 +51,17 @@ export const gameSlice = createSlice({
       state.black = game.black;
       const chess = getChess();
       state.board = chess.board();
+
+      state.isWhite =
+        game.white.sender._id === id || game.white.recipient._id === id;
+
+      state.isHand =
+        ((game.white.sender._id === id || game.white.recipient._id === id) &&
+          ((game.white.sender._id === id && game.isWhiteSenderHand) ||
+            (game.white.recipient._id === id && !game.isWhiteSenderHand))) ||
+        ((game.black.sender._id === id || game.black.recipient._id === id) &&
+          ((game.black.sender._id === id && game.isBlackSenderHand) ||
+            (game.black.recipient._id === id && !game.isBlackSenderHand)));
     },
     resetGame: (state) => {
       state.inGame = false;
@@ -55,6 +70,8 @@ export const gameSlice = createSlice({
       state.black = null;
       state.playerTurn = 0;
       state.board = [];
+      state.isWhite = false;
+      state.isHand = false;
     }
   }
 });
@@ -72,5 +89,7 @@ export const selectGameState = (state: RootState) => ({
   white: state.game.white,
   black: state.game.black,
   playerTurn: state.game.playerTurn,
-  board: state.game.board
+  board: state.game.board,
+  isWhite: state.game.isWhite,
+  isHand: state.game.isHand
 });

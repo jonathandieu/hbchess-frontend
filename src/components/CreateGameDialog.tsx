@@ -7,6 +7,7 @@ import { useCreateGameMutation } from '../app/services/gameApi';
 import { toast } from 'react-toastify';
 import { setInGame } from '../app/features/game/gameSlice';
 import { useAppDispatch } from '../hooks/store';
+import { useAuth } from '../hooks/useAuth';
 
 const CreateGameDialog = () => {
   const [selectedTeammate, setSelectedTeammate] = useState<{
@@ -22,6 +23,8 @@ const CreateGameDialog = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useAppDispatch();
 
+  const { user } = useAuth();
+
   function closeModal() {
     setIsOpen(false);
   }
@@ -32,7 +35,7 @@ const CreateGameDialog = () => {
         whiteId: selectedTeammate?.teamId ?? '',
         blackId: selectedOpponentTeam?._id ?? ''
       }).unwrap();
-      dispatch(setInGame({ game: result.game }));
+      dispatch(setInGame({ game: result.game, id: user?.id ?? '' }));
     } catch (err) {
       toast.error(err);
     }

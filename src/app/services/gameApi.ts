@@ -8,6 +8,8 @@ export interface Game {
   black: Team;
   moves: string;
   result: string;
+  isWhiteSenderHand: boolean;
+  isBlackSenderHand: boolean;
 }
 
 interface CreateGameRequest {

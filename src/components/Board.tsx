@@ -20,12 +20,16 @@ import w_queen from '../assets/w_queen.svg';
 import w_rook from '../assets/w_rook.svg';
 
 const Board = () => {
-  const { board } = useGameState();
+  const { board, isWhite } = useGameState();
   const dispatch = useAppDispatch();
 
   return (
     <div className="flex flex-col justify-center items-center p-4 space-y-4 w-[60%] h-[90%] text-white bg-gray-800 rounded-lg shadow-2xl">
-      <div className="flex flex-col justify-center items-center w-full">
+      <div
+        className={`flex ${
+          isWhite ? 'flex-col' : 'flex-col-reverse'
+        } justify-center items-center w-full`}
+      >
         {board.map(
           (
             row: Array<{ type: PieceType; color: 'w' | 'b' } | null>,
@@ -47,6 +51,7 @@ const Board = () => {
                         key={`${rank} - ${file}`}
                         rank={rank}
                         file={file}
+                        color={color}
                         piece={asset}
                       />
                     );
