@@ -1,0 +1,129 @@
+import { useState } from 'react';
+import { RadioGroup } from '@headlessui/react';
+import { useGameState } from '../hooks/useGameState';
+
+import b_bishop from '../assets/b_bishop.svg';
+import b_king from '../assets/b_king.svg';
+import b_knight from '../assets/b_knight.svg';
+import b_pawn from '../assets/b_pawn.svg';
+import b_queen from '../assets/b_queen.svg';
+import b_rook from '../assets/b_rook.svg';
+
+import w_bishop from '../assets/w_bishop.svg';
+import w_king from '../assets/w_king.svg';
+import w_knight from '../assets/w_knight.svg';
+import w_pawn from '../assets/w_pawn.svg';
+import w_queen from '../assets/w_queen.svg';
+import w_rook from '../assets/w_rook.svg';
+
+export default function Example() {
+  const { isWhite } = useGameState();
+
+  const options: Array<{ piece: string; asset: string }> = [
+    {
+      piece: 'Pawn',
+      asset: isWhite ? w_pawn : b_pawn
+    },
+    {
+      piece: 'Knight',
+      asset: isWhite ? w_knight : b_knight
+    },
+    {
+      piece: 'Bishop',
+      asset: isWhite ? w_bishop : b_bishop
+    },
+    { piece: 'Rook', asset: isWhite ? w_rook : b_rook },
+    { piece: 'Queen', asset: isWhite ? w_queen : b_queen },
+    { piece: 'King', asset: isWhite ? w_king : b_king }
+  ];
+
+  const [selectedPiece, setSelectedPiece] = useState(options[0]);
+
+  return (
+    <>
+      <div className="p-4 w-full">
+        <div className="mx-auto w-full max-w-md">
+          <RadioGroup value={selectedPiece} onChange={setSelectedPiece}>
+            <RadioGroup.Label className="sr-only">
+              Brain Piece Selector
+            </RadioGroup.Label>
+            <div className="space-y-2">
+              {options.map((option) => (
+                <RadioGroup.Option
+                  key={option.piece}
+                  value={option.piece}
+                  className={({ active, checked }) =>
+                    `${
+                      active
+                        ? 'ring-2 ring-offset-2 ring-offset-sky-300 ring-white ring-opacity-60'
+                        : ''
+                    }
+                  ${
+                    checked ? 'bg-sky-900 bg-opacity-75 text-white' : 'bg-white'
+                  }
+                    relative rounded-lg shadow-md px-5 py-4 cursor-pointer flex focus:outline-none`
+                  }
+                >
+                  {({ checked }) => (
+                    <>
+                      <div className="flex justify-between items-center w-full">
+                        <div className="flex items-center w-full">
+                          <div className="flex flex-row w-full text-sm">
+                            <RadioGroup.Label
+                              as="div"
+                              className={`font-medium  ${
+                                checked ? 'text-white' : 'text-gray-900'
+                              }`}
+                            >
+                              <img
+                                src={option.asset}
+                                className="w-4 h-4 xl:w-8 xl:h-8 3xl:w-14 3xl:h-14"
+                              />
+                            </RadioGroup.Label>
+                            <RadioGroup.Description
+                              as="div"
+                              className={`flex flex-1 justify-center items-center text-base 3xl:text-lg font-medium ${
+                                checked ? 'text-sky-100' : 'text-gray-500'
+                              }`}
+                            >
+                              {option.piece}
+                            </RadioGroup.Description>
+                          </div>
+                        </div>
+                        <div
+                          className={`shrink-0 text-white ${
+                            checked ? 'visible' : 'invisible'
+                          }`}
+                        >
+                          <CheckIcon className="w-6 h-6" />
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </RadioGroup.Option>
+              ))}
+            </div>
+          </RadioGroup>
+        </div>
+      </div>
+      <button className="flex justify-center items-center py-2.5 px-4 w-44 h-12 text-2xl font-bold text-center text-gray-300 bg-green-600 hover:bg-green-700 rounded transition duration-200">
+        LOCK IN
+      </button>
+    </>
+  );
+}
+
+function CheckIcon(props: { className: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" {...props}>
+      <circle cx={12} cy={12} r={12} fill="#fff" opacity="0.2" />
+      <path
+        d="M7 13l3 3 7-7"
+        stroke="#fff"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}

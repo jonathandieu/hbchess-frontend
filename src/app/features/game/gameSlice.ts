@@ -15,6 +15,8 @@ export interface GameState {
   result: string;
   isWhite: boolean;
   isHand: boolean;
+  pieceSelected: string;
+  pieceSelectedAsset: string;
 }
 
 const initialState: GameState = {
@@ -27,7 +29,9 @@ const initialState: GameState = {
   playersIn: [],
   result: '',
   isWhite: false,
-  isHand: false
+  isHand: false,
+  pieceSelected: '',
+  pieceSelectedAsset: ''
 };
 
 let chess: ChessInstance;
@@ -95,5 +99,7 @@ export const selectGameState = (state: RootState) => ({
   board: state.game.board,
   playersIn: state.game.playersIn,
   isWhite: state.game.isWhite,
-  isHand: state.game.isHand
+  isHand: state.game.isHand,
+  pieceSelected: state.game.pieceSelected,
+  pieceSelectedAsset: state.game.pieceSelectedAsset
 });

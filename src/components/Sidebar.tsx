@@ -1,5 +1,6 @@
 import { useGameState } from '../hooks/useGameState';
-
+import SelectPiece from './SelectPiece';
+import PieceSelected from './PieceSelected';
 const Sidebar = () => {
   const gameState = useGameState();
 
@@ -54,7 +55,13 @@ const Sidebar = () => {
       </div>
 
       <div className="flex flex-col flex-1 justify-center items-center">
-        {gameState.playersIn.length === 4 ? null : (
+        {gameState.playersIn.length === 4 ? (
+          gameState.isHand ? (
+            <PieceSelected />
+          ) : (
+            <SelectPiece />
+          )
+        ) : (
           <h1 className="text-2xl font-medium text-gray-100">
             Waiting for all players to join.
           </h1>
