@@ -17,6 +17,7 @@ export interface GameState {
   isHand: boolean;
   pieceSelected: string;
   possibleMoves: Array<string>;
+  highlightedSquare: string;
 }
 
 const initialState: GameState = {
@@ -31,7 +32,8 @@ const initialState: GameState = {
   isWhite: false,
   isHand: false,
   pieceSelected: '',
-  possibleMoves: []
+  possibleMoves: [],
+  highlightedSquare: ''
 };
 
 let chess: ChessInstance;
@@ -93,11 +95,14 @@ export const gameSlice = createSlice({
     },
     setPossibleMoves: (
       state,
-      { payload: { piece } }: PayloadAction<{ piece: string }>
+      {
+        payload: { piece, highlightedSquare }
+      }: PayloadAction<{ piece: string; highlightedSquare: string }>
     ) => {
       const chess = getChess();
 
       state.possibleMoves = chess.moves({ square: piece });
+      state.highlightedSquare = highlightedSquare;
     }
   }
 });
@@ -127,5 +132,6 @@ export const selectGameState = (state: RootState) => ({
   isHand: state.game.isHand,
   pieceSelected: state.game.pieceSelected,
   pieceSelectedAsset: state.game.pieceSelectedAsset,
-  possibleMoves: state.game.possibleMoves
+  possibleMoves: state.game.possibleMoves,
+  highlightedSquare: state.game.highlightedSquare
 });
