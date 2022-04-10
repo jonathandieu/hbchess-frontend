@@ -53,6 +53,7 @@ const Board = () => {
                         file={file}
                         color={color}
                         piece={asset}
+                        pieceType={type}
                       />
                     );
                   }
@@ -70,7 +71,7 @@ const Board = () => {
   );
 };
 
-const getAsset = (color: string, type: string) => {
+export const getAsset = (color: string, type: string) => {
   if (color === 'w') {
     switch (type) {
       case 'p':

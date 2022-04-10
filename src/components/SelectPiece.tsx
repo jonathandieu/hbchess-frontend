@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { RadioGroup } from '@headlessui/react';
+import { useInGame } from '../hooks/useInGame';
 import { useGameState } from '../hooks/useGameState';
+import { useAuth } from '../hooks/useAuth';
+import { usePickPieceMutation } from '../app/services/socketApi';
 
 import b_bishop from '../assets/b_bishop.svg';
 import b_king from '../assets/b_king.svg';
@@ -15,9 +18,16 @@ import w_knight from '../assets/w_knight.svg';
 import w_pawn from '../assets/w_pawn.svg';
 import w_queen from '../assets/w_queen.svg';
 import w_rook from '../assets/w_rook.svg';
+import { getAsset } from './Board';
+import { getPieceIdentifier } from './PieceSelected';
+import { useAppDispatch } from '../hooks/store';
+import { setPiecePicked } from '../app/features/game/gameSlice';
 
 export default function Example() {
-  const { isWhite } = useGameState();
+  const { roomId } = useInGame();
+  const { isWhite, pieceSelected } = useGameState();
+  const { token } = useAuth();
+  const dispatch = useAppDispatch();
 
   const options: Array<{ piece: string; asset: string }> = [
     {
@@ -36,8 +46,40 @@ export default function Example() {
     { piece: 'Queen', asset: isWhite ? w_queen : b_queen },
     { piece: 'King', asset: isWhite ? w_king : b_king }
   ];
+  const [selectedPiece, setSelectedPiece] = useState('');
 
-  const [selectedPiece, setSelectedPiece] = useState(options[0]);
+  const [pickPiece] = usePickPieceMutation();
+
+  if (pieceSelected !== '') {
+    const asset = getAsset(
+      isWhite ? 'w' : 'b',
+      getPieceIdentifier(pieceSelected)
+    );
+    return (
+      <>
+        <h1 className="py-8 font-medium text-gray-300 3xl:text-xl">
+          You have selected:
+        </h1>
+        <div className="flex relative py-4 px-5 w-2/3 text-white bg-sky-900/75 rounded-lg focus:outline-none ring-2 ring-white/60 ring-offset-2 ring-offset-sky-300 shadow-md">
+          <div className="flex justify-between items-center w-full">
+            <div className="flex items-center w-full">
+              <div className="flex flex-row w-full text-sm">
+                <div className="font-medium text-white">
+                  <img
+                    src={asset}
+                    className="w-4 h-4 xl:w-8 xl:h-8 3xl:w-14 3xl:h-14"
+                  />
+                </div>
+                <div className="flex flex-1 justify-center items-center text-base font-medium text-sky-100 3xl:text-lg">
+                  {pieceSelected}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -106,14 +148,25 @@ export default function Example() {
           </RadioGroup>
         </div>
       </div>
-      <button className="flex justify-center items-center py-2.5 px-4 w-44 h-12 text-2xl font-bold text-center text-gray-300 bg-green-600 hover:bg-green-700 rounded transition duration-200">
+      <button
+        className="flex justify-center items-center py-2.5 px-4 w-44 h-12 text-2xl font-bold text-center text-gray-300 bg-green-600 hover:bg-green-700 rounded transition duration-200"
+        onClick={() => {
+          pickPiece({
+            token,
+            roomId,
+            piece: selectedPiece
+          });
+
+          dispatch(setPiecePicked({ pickedPiece: selectedPiece }));
+        }}
+      >
         LOCK IN
       </button>
     </>
   );
 }
 
-function CheckIcon(props: { className: string }) {
+const CheckIcon = (props: { className: string }) => {
   return (
     <svg viewBox="0 0 24 24" fill="none" {...props}>
       <circle cx={12} cy={12} r={12} fill="#fff" opacity="0.2" />
@@ -126,4 +179,4 @@ function CheckIcon(props: { className: string }) {
       />
     </svg>
   );
-}
+};

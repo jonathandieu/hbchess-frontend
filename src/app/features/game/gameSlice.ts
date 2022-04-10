@@ -9,14 +9,14 @@ export interface GameState {
   roomId: string;
   white: Team | null;
   black: Team | null;
-  playerTurn: number;
+  teamTurn: 'w' | 'b';
   board: Array<Array<{ type: PieceType; color: 'w' | 'b' } | null>>;
   playersIn: Array<string>;
   result: string;
   isWhite: boolean;
   isHand: boolean;
   pieceSelected: string;
-  pieceSelectedAsset: string;
+  possibleMoves: Array<string>;
 }
 
 const initialState: GameState = {
@@ -24,14 +24,14 @@ const initialState: GameState = {
   roomId: '',
   white: null,
   black: null,
-  playerTurn: 0,
+  teamTurn: 'w',
   board: [],
   playersIn: [],
   result: '',
   isWhite: false,
   isHand: false,
   pieceSelected: '',
-  pieceSelectedAsset: ''
+  possibleMoves: []
 };
 
 let chess: ChessInstance;
@@ -79,11 +79,36 @@ export const gameSlice = createSlice({
       { payload: { playerIds } }: PayloadAction<{ playerIds: Array<string> }>
     ) => {
       state.playersIn = playerIds;
+    },
+    setPiecePicked: (
+      state,
+      { payload: { pickedPiece } }: PayloadAction<{ pickedPiece: string }>
+    ) => {
+      if (
+        (state.isWhite && state.teamTurn === 'w') ||
+        (!state.isWhite && state.teamTurn === 'b')
+      ) {
+        state.pieceSelected = pickedPiece;
+      }
+    },
+    setPossibleMoves: (
+      state,
+      { payload: { piece } }: PayloadAction<{ piece: string }>
+    ) => {
+      const chess = getChess();
+
+      state.possibleMoves = chess.moves({ square: piece });
     }
   }
 });
 
-export const { setInGame, resetGame, addJoinedPlayer } = gameSlice.actions;
+export const {
+  setInGame,
+  resetGame,
+  addJoinedPlayer,
+  setPiecePicked,
+  setPossibleMoves
+} = gameSlice.actions;
 
 export default gameSlice.reducer;
 
@@ -95,11 +120,12 @@ export const selectInGame = (state: RootState) => ({
 export const selectGameState = (state: RootState) => ({
   white: state.game.white,
   black: state.game.black,
-  playerTurn: state.game.playerTurn,
+  teamTurn: state.game.teamTurn,
   board: state.game.board,
   playersIn: state.game.playersIn,
   isWhite: state.game.isWhite,
   isHand: state.game.isHand,
   pieceSelected: state.game.pieceSelected,
-  pieceSelectedAsset: state.game.pieceSelectedAsset
+  pieceSelectedAsset: state.game.pieceSelectedAsset,
+  possibleMoves: state.game.possibleMoves
 });

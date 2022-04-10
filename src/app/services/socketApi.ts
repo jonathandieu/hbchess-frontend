@@ -29,8 +29,10 @@ export const socketApi = createApi({
   reducerPath: 'socketApi',
   baseQuery: fetchBaseQuery({ baseUrl: baseUrl }),
   endpoints: (builder) => ({
-    // eslint-disable-next-line prettier/prettier
-    joinGame: builder.mutation<{ message: string }, { token: string; roomId: string, player_id: string }>({
+    joinGame: builder.mutation<
+      { message: string },
+      { token: string; roomId: string; player_id: string }
+    >({
       queryFn: ({
         token,
         roomId,
@@ -72,8 +74,60 @@ export const socketApi = createApi({
           // cacheDataLoaded throws
         }
       }
+    }),
+    pickPiece: builder.mutation<
+      { message: string },
+      { token: string; roomId: string; piece: string }
+    >({
+      queryFn: ({
+        token,
+        roomId,
+        piece
+      }: {
+        token: string;
+        roomId: string;
+        piece: string;
+      }) => {
+        const socket = getSocket(token);
+        return new Promise((resolve) => {
+          socket.emit('pick_piece', { roomId, piece }, (message: string) =>
+            resolve({ data: { message } })
+          );
+        });
+      }
+    }),
+    pickedPiece: builder.query<string, string>({
+      queryFn: () => ({ data: '' }),
+      async onCacheEntryAdded(
+        token,
+        { cacheDataLoaded, cacheEntryRemoved, updateCachedData }
+      ) {
+        try {
+          await cacheDataLoaded;
+          const socket = getSocket(token);
+
+          socket.on('piecePicked', (pieceMoved: string) => {
+            updateCachedData((draft) => {
+              draft = pieceMoved;
+              return draft;
+            });
+          });
+
+          await cacheEntryRemoved;
+
+          socket.off('piecePicked');
+        } catch {
+          // if cacheEntryRemoved resolved before cacheDataLoaded,
+          // cacheDataLoaded throws
+        }
+      }
     })
   })
 });
 
-export const { useJoinGameMutation, usePlayerJoinsQuery } = socketApi;
+export const {
+  useJoinGameMutation,
+  usePlayerJoinsQuery,
+  usePickPieceMutation,
+  usePickedPieceQuery
+} = socketApi;

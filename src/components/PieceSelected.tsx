@@ -1,7 +1,12 @@
 import { useGameState } from '../hooks/useGameState';
+import { getAsset } from './Board';
 
 const PieceSelected = () => {
-  const { pieceSelected, pieceSelectedAsset } = useGameState();
+  const { pieceSelected, isWhite } = useGameState();
+  const asset = getAsset(
+    isWhite ? 'w' : 'b',
+    getPieceIdentifier(pieceSelected)
+  );
 
   return (
     <>
@@ -16,7 +21,7 @@ const PieceSelected = () => {
                 <>
                   <div className="font-medium text-white">
                     <img
-                      src={pieceSelectedAsset}
+                      src={asset}
                       className="w-4 h-4 xl:w-8 xl:h-8 3xl:w-14 3xl:h-14"
                     />
                   </div>
@@ -35,6 +40,25 @@ const PieceSelected = () => {
       </div>
     </>
   );
+};
+
+export const getPieceIdentifier = (piece: string) => {
+  switch (piece) {
+    case 'Pawn':
+      return 'p';
+    case 'Knight':
+      return 'n';
+    case 'Bishop':
+      return 'b';
+    case 'Rook':
+      return 'r';
+    case 'Queen':
+      return 'q';
+    case 'King':
+      return 'k';
+    default:
+      return '';
+  }
 };
 
 export default PieceSelected;

@@ -1,6 +1,7 @@
 import { useGameState } from '../hooks/useGameState';
 import SelectPiece from './SelectPiece';
 import PieceSelected from './PieceSelected';
+
 const Sidebar = () => {
   const gameState = useGameState();
 
@@ -56,10 +57,17 @@ const Sidebar = () => {
 
       <div className="flex flex-col flex-1 justify-center items-center">
         {gameState.playersIn.length === 4 ? (
-          gameState.isHand ? (
-            <PieceSelected />
+          (gameState.isWhite && gameState.teamTurn === 'w') ||
+          (!gameState.isWhite && gameState.teamTurn === 'b') ? (
+            gameState.isHand ? (
+              <PieceSelected />
+            ) : (
+              <SelectPiece />
+            )
           ) : (
-            <SelectPiece />
+            <h1 className="text-2xl font-medium text-gray-100">
+              Other Team&apos;s Turn
+            </h1>
           )
         ) : (
           <h1 className="text-2xl font-medium text-gray-100">
