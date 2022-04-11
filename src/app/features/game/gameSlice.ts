@@ -39,7 +39,7 @@ const initialState: GameState = {
 let chess: ChessInstance;
 const getChess = () => {
   if (!chess) {
-    chess = Chess();
+    chess = new Chess();
   }
 
   return chess;
@@ -71,11 +71,7 @@ export const gameSlice = createSlice({
           ((game.black.sender._id === id && game.isBlackSenderHand) ||
             (game.black.recipient._id === id && !game.isBlackSenderHand)));
     },
-    resetGame: (state) => {
-      state = initialState;
-
-      return state;
-    },
+    resetGame: () => initialState,
     addJoinedPlayer: (
       state,
       { payload: { playerIds } }: PayloadAction<{ playerIds: Array<string> }>
@@ -100,9 +96,24 @@ export const gameSlice = createSlice({
       }: PayloadAction<{ piece: string; highlightedSquare: string }>
     ) => {
       const chess = getChess();
-
+      console.log({ square: piece });
       state.possibleMoves = chess.moves({ square: piece });
       state.highlightedSquare = highlightedSquare;
+    },
+    setMove: (
+      state,
+      { payload: { move } }: PayloadAction<{ move: string }>
+    ) => {
+      if (move === '') {
+        return;
+      }
+
+      const chess = getChess();
+      chess.move(move);
+      state.board = chess.board();
+      state.possibleMoves = [];
+      state.highlightedSquare = '';
+      state.teamTurn = state.teamTurn === 'w' ? 'b' : 'w';
     }
   }
 });
@@ -112,7 +123,8 @@ export const {
   resetGame,
   addJoinedPlayer,
   setPiecePicked,
-  setPossibleMoves
+  setPossibleMoves,
+  setMove
 } = gameSlice.actions;
 
 export default gameSlice.reducer;

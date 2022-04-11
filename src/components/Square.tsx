@@ -1,8 +1,10 @@
 import { useGameState } from '../hooks/useGameState';
-import { setPossibleMoves } from '../app/features/game/gameSlice';
+import { setPossibleMoves, setMove } from '../app/features/game/gameSlice';
 import { useAppDispatch } from '../hooks/store';
 import { getPieceIdentifier } from './PieceSelected';
-
+import { useAuth } from '../hooks/useAuth';
+import { useInGame } from '../hooks/useInGame';
+import { useMakeMoveMutation } from '../app/services/socketApi';
 interface SquareProps {
   rank: number;
   file: number;
@@ -15,9 +17,11 @@ const Square = ({ rank, file, color, piece, pieceType }: SquareProps) => {
   const { isWhite, isHand, pieceSelected, possibleMoves, highlightedSquare } =
     useGameState();
   const dispatch = useAppDispatch();
+  const { token } = useAuth();
+  const { roomId } = useInGame();
+  const [makeMove] = useMakeMoveMutation();
 
   const squareName = getSquareName(rank, file);
-
   const movesOnSquare = [
     squareName,
     getPieceIdentifier(pieceSelected).toUpperCase() + squareName,
@@ -31,8 +35,8 @@ const Square = ({ rank, file, color, piece, pieceType }: SquareProps) => {
       squareName
   ];
 
-  const isAMoveSquare = possibleMoves.some((v: string) =>
-    movesOnSquare.includes(v)
+  const isAMoveSquare = possibleMoves.filter((value: string) =>
+    movesOnSquare.includes(value)
   );
 
   return (
@@ -42,7 +46,7 @@ const Square = ({ rank, file, color, piece, pieceType }: SquareProps) => {
         isHand &&
         ((isWhite && color === 'w') ||
           (!isWhite && color === 'b') ||
-          isAMoveSquare)
+          isAMoveSquare.length !== 0)
           ? 'cursor-pointer'
           : 'cursor-default'
       } ${
@@ -51,8 +55,10 @@ const Square = ({ rank, file, color, piece, pieceType }: SquareProps) => {
           : 'bg-green-800'
       }`}
       onClick={() => {
-        if (isAMoveSquare) {
-          console.log('SQUARE MOVE');
+        console.log(squareName);
+        if (isAMoveSquare.length !== 0) {
+          makeMove({ token, roomId, move: isAMoveSquare[0] });
+          dispatch(setMove({ move: isAMoveSquare[0] }));
           return;
         }
 
@@ -87,7 +93,7 @@ const Square = ({ rank, file, color, piece, pieceType }: SquareProps) => {
           draggable="false"
         />
       )}
-      {isAMoveSquare && (
+      {isAMoveSquare.length !== 0 && (
         <div className="z-20 w-4 h-4 bg-gray-400/70 rounded-full xl:w-8 xl:h-8 3xl:w-14 3xl:h-14" />
       )}
     </button>

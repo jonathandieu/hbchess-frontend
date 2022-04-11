@@ -121,6 +121,53 @@ export const socketApi = createApi({
           // cacheDataLoaded throws
         }
       }
+    }),
+    makeMove: builder.mutation<
+      { message: string },
+      { token: string; roomId: string; move: string }
+    >({
+      queryFn: ({
+        token,
+        roomId,
+        move
+      }: {
+        token: string;
+        roomId: string;
+        move: string;
+      }) => {
+        const socket = getSocket(token);
+        return new Promise((resolve) => {
+          socket.emit('send_move', { roomId, move }, (message: string) =>
+            resolve({ data: { message } })
+          );
+        });
+      }
+    }),
+    sentMove: builder.query<string, string>({
+      queryFn: () => ({ data: '' }),
+      async onCacheEntryAdded(
+        token,
+        { cacheDataLoaded, cacheEntryRemoved, updateCachedData }
+      ) {
+        try {
+          await cacheDataLoaded;
+          const socket = getSocket(token);
+
+          socket.on('sentMove', (pieceMoved: string) => {
+            updateCachedData((draft) => {
+              draft = pieceMoved;
+              return draft;
+            });
+          });
+
+          await cacheEntryRemoved;
+
+          socket.off('sentMove');
+        } catch {
+          // if cacheEntryRemoved resolved before cacheDataLoaded,
+          // cacheDataLoaded throws
+        }
+      }
     })
   })
 });
@@ -129,5 +176,7 @@ export const {
   useJoinGameMutation,
   usePlayerJoinsQuery,
   usePickPieceMutation,
-  usePickedPieceQuery
+  usePickedPieceQuery,
+  useMakeMoveMutation,
+  useSentMoveQuery
 } = socketApi;
