@@ -117,9 +117,22 @@ export const gameSlice = createSlice({
       const chess = getChess();
       chess.move(move);
       state.board = chess.board();
-      state.pieceSelected = '';
       state.possibleMoves = [];
       state.highlightedSquare = '';
+
+      if (chess.in_checkmate()) {
+        state.result = `${state.teamTurn === 'w' ? 'White' : 'Black'} Wins`;
+        return;
+      } else if (
+        chess.in_stalemate() ||
+        chess.in_threefold_repetition() ||
+        chess.insufficient_material()
+      ) {
+        state.result = 'Draw';
+        return;
+      }
+
+      state.pieceSelected = '';
       state.teamTurn = state.teamTurn === 'w' ? 'b' : 'w';
     }
   }
@@ -152,5 +165,6 @@ export const selectGameState = (state: RootState) => ({
   pieceSelected: state.game.pieceSelected,
   pieceSelectedAsset: state.game.pieceSelectedAsset,
   possibleMoves: state.game.possibleMoves,
-  highlightedSquare: state.game.highlightedSquare
+  highlightedSquare: state.game.highlightedSquare,
+  result: state.game.result
 });

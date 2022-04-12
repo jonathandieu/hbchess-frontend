@@ -7,6 +7,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useInGame } from '../hooks/useInGame';
 import Board from './Board';
 import Sidebar from './Sidebar';
+import ShowResultDialog from './ShowResultDialog';
 import {
   addJoinedPlayer,
   setPiecePicked,
@@ -47,6 +48,7 @@ const Game = () => {
 
   return (
     <div className="flex flex-row justify-around items-center w-full h-full">
+      <ShowResultDialog />
       <Board />
       <Sidebar />
     </div>
