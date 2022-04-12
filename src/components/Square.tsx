@@ -22,27 +22,15 @@ const Square = ({ rank, file, color, piece, pieceType }: SquareProps) => {
   const [makeMove] = useMakeMoveMutation();
 
   const squareName = getSquareName(rank, file);
-  const movesOnSquare = [
-    squareName,
-    getPieceIdentifier(pieceSelected).toUpperCase() + squareName,
-    getPieceIdentifier(pieceSelected).toUpperCase() + 'x' + squareName,
-    getFileLetter(file) +
-      getPieceIdentifier(pieceSelected).toUpperCase() +
-      squareName,
-    getFileLetter(file) +
-      getPieceIdentifier(pieceSelected).toUpperCase() +
-      'x' +
-      squareName
-  ];
 
   const isAMoveSquare = possibleMoves.filter((value: string) =>
-    movesOnSquare.includes(value)
+    value.includes(squareName)
   );
 
   return (
     <button
       key={`${rank} - ${file}`}
-      className={`flex justify-center items-center w-10 h-10 xl:w-14 xl:h-14 3xl:w-28 3xl:h-28 ${
+      className={`relative flex justify-center items-center w-10 h-10 xl:w-14 xl:h-14 3xl:w-28 3xl:h-28 ${
         isHand &&
         ((isWhite && color === 'w') ||
           (!isWhite && color === 'b') ||
@@ -55,7 +43,6 @@ const Square = ({ rank, file, color, piece, pieceType }: SquareProps) => {
           : 'bg-green-800'
       }`}
       onClick={() => {
-        console.log(squareName);
         if (isAMoveSquare.length !== 0) {
           makeMove({ token, roomId, move: isAMoveSquare[0] });
           dispatch(setMove({ move: isAMoveSquare[0] }));
@@ -89,12 +76,12 @@ const Square = ({ rank, file, color, piece, pieceType }: SquareProps) => {
       {piece !== '' && (
         <img
           src={piece}
-          className="w-8 h-8 xl:w-10 xl:h-10 3xl:w-20 3xl:h-20"
+          className="absolute w-8 h-8 xl:w-10 xl:h-10 3xl:w-20 3xl:h-20"
           draggable="false"
         />
       )}
       {isAMoveSquare.length !== 0 && (
-        <div className="z-20 w-4 h-4 bg-gray-400/70 rounded-full xl:w-8 xl:h-8 3xl:w-14 3xl:h-14" />
+        <div className="absolute z-20 w-4 h-4 bg-gray-400/70 rounded-full xl:w-8 xl:h-8 3xl:w-14 3xl:h-14" />
       )}
     </button>
   );

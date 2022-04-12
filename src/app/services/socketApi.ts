@@ -96,8 +96,8 @@ export const socketApi = createApi({
         });
       }
     }),
-    pickedPiece: builder.query<string, string>({
-      queryFn: () => ({ data: '' }),
+    pickedPiece: builder.query<Array<string>, string>({
+      queryFn: () => ({ data: [] }),
       async onCacheEntryAdded(
         token,
         { cacheDataLoaded, cacheEntryRemoved, updateCachedData }
@@ -106,10 +106,9 @@ export const socketApi = createApi({
           await cacheDataLoaded;
           const socket = getSocket(token);
 
-          socket.on('piecePicked', (pieceMoved: string) => {
+          socket.on('piecePicked', (pieceType: string) => {
             updateCachedData((draft) => {
-              draft = pieceMoved;
-              return draft;
+              draft.push(pieceType);
             });
           });
 
@@ -143,8 +142,8 @@ export const socketApi = createApi({
         });
       }
     }),
-    sentMove: builder.query<string, string>({
-      queryFn: () => ({ data: '' }),
+    sentMove: builder.query<Array<string>, string>({
+      queryFn: () => ({ data: [] }),
       async onCacheEntryAdded(
         token,
         { cacheDataLoaded, cacheEntryRemoved, updateCachedData }
@@ -155,8 +154,7 @@ export const socketApi = createApi({
 
           socket.on('sentMove', (pieceMoved: string) => {
             updateCachedData((draft) => {
-              draft = pieceMoved;
-              return draft;
+              draft.push(pieceMoved);
             });
           });
 

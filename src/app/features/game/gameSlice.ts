@@ -71,7 +71,13 @@ export const gameSlice = createSlice({
           ((game.black.sender._id === id && game.isBlackSenderHand) ||
             (game.black.recipient._id === id && !game.isBlackSenderHand)));
     },
-    resetGame: () => initialState,
+    resetGame: (state) => {
+      state = initialState;
+      const chess = getChess();
+      chess.reset();
+
+      return state;
+    },
     addJoinedPlayer: (
       state,
       { payload: { playerIds } }: PayloadAction<{ playerIds: Array<string> }>
@@ -96,7 +102,7 @@ export const gameSlice = createSlice({
       }: PayloadAction<{ piece: string; highlightedSquare: string }>
     ) => {
       const chess = getChess();
-      console.log({ square: piece });
+
       state.possibleMoves = chess.moves({ square: piece });
       state.highlightedSquare = highlightedSquare;
     },
@@ -104,13 +110,14 @@ export const gameSlice = createSlice({
       state,
       { payload: { move } }: PayloadAction<{ move: string }>
     ) => {
-      if (move === '') {
+      if (!move || move === '') {
         return;
       }
 
       const chess = getChess();
       chess.move(move);
       state.board = chess.board();
+      state.pieceSelected = '';
       state.possibleMoves = [];
       state.highlightedSquare = '';
       state.teamTurn = state.teamTurn === 'w' ? 'b' : 'w';

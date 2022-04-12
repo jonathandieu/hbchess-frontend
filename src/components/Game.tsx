@@ -23,8 +23,8 @@ const Game = () => {
   const { token, user } = useAuth();
   const { roomId } = useInGame();
   const { data: joined = [] } = usePlayerJoinsQuery(token);
-  const { data: pickedPiece = '' } = usePickedPieceQuery(token);
-  const { data: sentMove = '' } = useSentMoveQuery(token);
+  const { data: pickedPiece = [] } = usePickedPieceQuery(token);
+  const { data: sentMove = [] } = useSentMoveQuery(token);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -36,13 +36,13 @@ const Game = () => {
   }, [joined]);
 
   useEffect(() => {
-    console.log(pickedPiece);
-    dispatch(setPiecePicked({ pickedPiece }));
+    dispatch(
+      setPiecePicked({ pickedPiece: pickedPiece[pickedPiece.length - 1] })
+    );
   }, [pickedPiece]);
 
   useEffect(() => {
-    console.log(sentMove);
-    dispatch(setMove({ move: sentMove }));
+    dispatch(setMove({ move: sentMove[sentMove.length - 1] }));
   }, [sentMove]);
 
   return (

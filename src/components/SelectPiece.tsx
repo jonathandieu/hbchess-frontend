@@ -50,7 +50,7 @@ export default function Example() {
 
   const [pickPiece] = usePickPieceMutation();
 
-  if (pieceSelected !== '') {
+  if (pieceSelected && pieceSelected !== '') {
     const asset = getAsset(
       isWhite ? 'w' : 'b',
       getPieceIdentifier(pieceSelected)
