@@ -37,7 +37,7 @@ const initialState: GameState = {
 };
 
 let chess: ChessInstance;
-export const getChess = () => {
+const getChess = () => {
   if (!chess) {
     chess = new Chess();
   }
@@ -90,7 +90,7 @@ export const gameSlice = createSlice({
     ) => {
       if (
         (state.isWhite && state.teamTurn === 'w') ||
-      (!state.isWhite && state.teamTurn === 'b')
+        (!state.isWhite && state.teamTurn === 'b')
       ) {
         state.pieceSelected = pickedPiece;
       }

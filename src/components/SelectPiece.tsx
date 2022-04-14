@@ -21,52 +21,30 @@ import w_rook from '../assets/w_rook.svg';
 import { getAsset } from './Board';
 import { getPieceIdentifier } from './PieceSelected';
 import { useAppDispatch } from '../hooks/store';
-import { setPiecePicked, getChess } from '../app/features/game/gameSlice';
+import { setPiecePicked } from '../app/features/game/gameSlice';
 
 export default function Example() {
   const { roomId } = useInGame();
-  const { isWhite, board, pieceSelected } = useGameState();
+  const { isWhite, pieceSelected } = useGameState();
   const { token } = useAuth();
   const dispatch = useAppDispatch();
 
-  const chess = getChess();
-
-  function pieceHasValidMoves(piece: string) {
-    let hasValidMove = false;
-    for (let i = 0; i < 8; i++) {
-      for (let j = 0; j < 8; j++) {
-        hasValidMove = (
-          board[i][j]?.type === piece &&
-          ((isWhite && board[i][j]?.color === 'w') ||
-            (!isWhite && board[i][j]?.color === 'b')) &&
-          chess.moves({ square: String.fromCharCode(97 + j) + `${8 - i}` }).length != 0
-        );
-        if (hasValidMove) break;
-      }
-      if (hasValidMove) break;
-    }
-    return hasValidMove;
-  }
-
-  const options: Array<{ piece: string; asset: string; isValid: boolean }> = [
+  const options: Array<{ piece: string; asset: string }> = [
     {
       piece: 'Pawn',
-      asset: isWhite ? w_pawn : b_pawn,
-      isValid: pieceHasValidMoves('p')
+      asset: isWhite ? w_pawn : b_pawn
     },
     {
       piece: 'Knight',
-      asset: isWhite ? w_knight : b_knight,
-      isValid: pieceHasValidMoves('k')
+      asset: isWhite ? w_knight : b_knight
     },
     {
       piece: 'Bishop',
-      asset: isWhite ? w_bishop : b_bishop,
-      isValid: pieceHasValidMoves('b')
+      asset: isWhite ? w_bishop : b_bishop
     },
-    { piece: 'Rook', asset: isWhite ? w_rook : b_rook, isValid: pieceHasValidMoves('r') },
-    { piece: 'Queen', asset: isWhite ? w_queen : b_queen, isValid: pieceHasValidMoves('q') },
-    { piece: 'King', asset: isWhite ? w_king : b_king, isValid: pieceHasValidMoves('k') }
+    { piece: 'Rook', asset: isWhite ? w_rook : b_rook },
+    { piece: 'Queen', asset: isWhite ? w_queen : b_queen },
+    { piece: 'King', asset: isWhite ? w_king : b_king }
   ];
   const [selectedPiece, setSelectedPiece] = useState('');
 
@@ -116,7 +94,6 @@ export default function Example() {
                 <RadioGroup.Option
                   key={option.piece}
                   value={option.piece}
-                  disabled={!option.isValid}
                   className={({ active, checked }) =>
                     `${
                       active
