@@ -2,17 +2,24 @@ import { configureStore } from '@reduxjs/toolkit';
 import { authApi } from './services/authApi';
 import { usersApi } from './services/usersApi';
 import { teamsApi } from './services/teamsApi';
+import { socketApi } from './services/socketApi';
+import { gameApi } from './services/gameApi';
+
 import storage from 'redux-persist/lib/storage';
 import { combineReducers } from 'redux';
 import { persistReducer } from 'redux-persist';
 import authReducer from './features/auth/authSlice';
+import gameReducer from './features/game/gameSlice';
 import createExpirationTransform from './redux-persist-expire';
 
 const reducers = combineReducers({
   [authApi.reducerPath]: authApi.reducer,
   [usersApi.reducerPath]: usersApi.reducer,
   [teamsApi.reducerPath]: teamsApi.reducer,
-  auth: authReducer
+  [socketApi.reducerPath]: socketApi.reducer,
+  [gameApi.reducerPath]: gameApi.reducer,
+  auth: authReducer,
+  game: gameReducer
 });
 
 const userExpireTransform = createExpirationTransform({
@@ -26,7 +33,12 @@ const userExpireTransform = createExpirationTransform({
 
 const persistConfig = {
   key: 'root',
-  blacklist: [teamsApi.reducerPath, usersApi.reducerPath],
+  blacklist: [
+    teamsApi.reducerPath,
+    usersApi.reducerPath,
+    socketApi.reducerPath,
+    gameApi.reducerPath
+  ],
   transforms: [userExpireTransform],
   storage
 };
@@ -40,7 +52,9 @@ export const store = configureStore({
     getDefaultMiddleware({ serializableCheck: false }).concat(
       authApi.middleware,
       teamsApi.middleware,
-      usersApi.middleware
+      usersApi.middleware,
+      socketApi.middleware,
+      gameApi.middleware
     )
 });
 

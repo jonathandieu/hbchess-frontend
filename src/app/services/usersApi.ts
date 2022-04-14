@@ -1,8 +1,13 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RootState } from '../store';
 
+export interface User {
+  _id: string;
+  username: string;
+}
+
 export interface SearchResponse {
-  results: Array<{ id: string; username: string }>;
+  results: Array<User>;
 }
 
 const baseUrl =
@@ -24,7 +29,7 @@ export const usersApi = createApi({
   }),
 
   endpoints: (builder) => ({
-    search: builder.query<Array<{ id: string; username: string }>, string>({
+    search: builder.query<Array<User>, string>({
       transformResponse: (response: SearchResponse) => response.results,
       query: (user) => `search/?search=${user}`
     })

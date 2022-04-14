@@ -158,7 +158,8 @@ const LoggedInTemplate = () => {
             </span>
             Leaderboard
           </Link>
-          <div className="flex flex-1 items-end">
+          <div className="flex flex-col flex-1 justify-end">
+            <p className="py-2.5 px-4 w-full text-lg">Hello, {user.username}</p>
             <button
               className="flex flex-row py-2.5 px-4 w-full hover:text-white hover:bg-green-700 rounded transition duration-200"
               onClick={handleLogout}

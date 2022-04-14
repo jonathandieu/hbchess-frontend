@@ -10,6 +10,9 @@ module.exports = {
         nyanza: '#B9F3B9',
         cadet: '#5D737E',
         'dark-liver': '#55505C'
+      },
+      screens: {
+        '3xl': '2000px'
       }
     }
   },

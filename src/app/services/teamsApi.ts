@@ -1,12 +1,16 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RootState } from '../store';
+import { User } from './usersApi';
 
 export interface Team {
   _id: string;
-  sender: string;
-  senderUsername: string;
-  recipient: string;
-  recipientUsername: string;
+  sender: User;
+  recipient: User;
+  matches: number;
+  wins: number;
+  losses: number;
+  ties: number;
+  name: string;
   accepted: boolean;
 }
 
@@ -21,6 +25,11 @@ export interface CreateTeamRequest {
 
 export interface AcceptTeamRequest {
   username: string;
+}
+
+export interface GetAllTeamsRequest {
+  limit: number;
+  offset: number;
 }
 
 const baseUrl =
@@ -65,6 +74,9 @@ export const teamsApi = createApi({
         method: 'PUT',
         body: acceptTeamBody
       })
+    }),
+    getAllTeams: builder.query<Team[], GetAllTeamsRequest>({
+      query: ({ limit, offset }) => `all?limit=${limit}&offset=${offset}`
     })
   })
 });
@@ -72,5 +84,6 @@ export const teamsApi = createApi({
 export const {
   useGetTeamsQuery,
   useCreateTeamMutation,
-  useAcceptTeamMutation
+  useAcceptTeamMutation,
+  useGetAllTeamsQuery
 } = teamsApi;

@@ -62,4 +62,7 @@ export const { setCredentials, resetCredentials } = authSlice.actions;
 
 export default authSlice.reducer;
 
-export const selectCurrentUser = (state: RootState) => state.auth.user;
+export const selectCurrentUser = (state: RootState) => ({
+  user: state.auth.user,
+  token: state.auth.token
+});
