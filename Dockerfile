@@ -1,19 +1,12 @@
 # pull the official base image
-FROM node:alpine
-# set working directory
-WORKDIR /app
-# add `/app/node_modules/.bin` to $PATH
-ENV PATH /app/node_modules/.bin:$PATH
-# install application dependencies
-COPY package.json ./
-COPY package-lock.json ./
-RUN npm i
-# add app
-COPY . ./
+FROM nginx:latest
+# create environment variables
+ENV BACKEND_ADDRESS="localhost"
+# add all of the built files into the nginx build folder to be served
+COPY ./build ./build/var/www/html/frontend/build/
 # map ports
-EXPOSE 3000
+EXPOSE 80
 EXPOSE 443
-EXPOSE 2222
-EXPOSE 22
+
 # start app
-CMD ["npm", "run", "tsc"]
+CMD ["npm", "run", "build"]
