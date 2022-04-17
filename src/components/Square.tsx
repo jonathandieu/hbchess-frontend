@@ -23,8 +23,14 @@ const Square = ({ rank, file, color, piece, pieceType }: SquareProps) => {
 
   const squareName = getSquareName(rank, file);
 
-  const isAMoveSquare = possibleMoves.filter((value: string) =>
-    value.includes(squareName)
+  const isAMoveSquare = possibleMoves.filter(
+    (value: string) =>
+      (value.includes(squareName) &&
+        !value.includes('=R') &&
+        !value.includes('=B') &&
+        !value.includes('=N')) ||
+      (value === 'O-O' && squareName === 'g1') ||
+      (value === 'O-O-O' && squareName === 'c1')
   );
 
   return (
