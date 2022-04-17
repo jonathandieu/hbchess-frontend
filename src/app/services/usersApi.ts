@@ -10,10 +10,9 @@ export interface SearchResponse {
   results: Array<User>;
 }
 
-const baseUrl =
-  process.env.NODE_ENV === 'production'
-    ? 'https://hbchess.app/api/users'
-    : 'http://localhost:8080/api/users';
+const baseUrl = `http${process.env.NODE_ENV === 'production' ? 's' : ''}://${
+  window.location.host
+}/api/users`;
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',
@@ -22,7 +21,7 @@ export const usersApi = createApi({
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       if (token) {
-        headers.set('authorization', `${token}`);
+        headers.set('authorization', `Bearer ${token}`);
       }
       return headers;
     }

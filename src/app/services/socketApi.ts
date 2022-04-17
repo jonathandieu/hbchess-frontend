@@ -10,9 +10,9 @@ let socket: Socket;
 const getSocket = (token: string) => {
   if (!socket) {
     socket = io(
-      process.env.NODE === 'production'
-        ? 'https://hbchess.app'
-        : 'http://localhost:65080',
+      `http${process.env.NODE_ENV === 'production' ? 's' : ''}://${
+        window.location.host
+      }`,
       {
         transports: ['websocket'],
         query: {

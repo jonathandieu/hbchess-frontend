@@ -22,10 +22,9 @@ interface CreateGameResponse {
   game: Game;
 }
 
-const baseUrl =
-  process.env.NODE_ENV === 'production'
-    ? 'https://hbchess.app/api/games'
-    : 'http://localhost:8080/api/games';
+const baseUrl = `http${process.env.NODE_ENV === 'production' ? 's' : ''}://${
+  window.location.host
+}/api/games`;
 
 export const gameApi = createApi({
   reducerPath: 'gameApi',
@@ -34,7 +33,7 @@ export const gameApi = createApi({
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       if (token) {
-        headers.set('authorization', `${token}`);
+        headers.set('authorization', `Bearer ${token}`);
       }
       return headers;
     }

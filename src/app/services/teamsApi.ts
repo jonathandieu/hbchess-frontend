@@ -32,10 +32,9 @@ export interface GetAllTeamsRequest {
   offset: number;
 }
 
-const baseUrl =
-  process.env.NODE_ENV === 'production'
-    ? 'https://hbchess.app/api/teams'
-    : 'http://localhost:8080/api/teams';
+const baseUrl = `http${process.env.NODE_ENV === 'production' ? 's' : ''}://${
+  window.location.host
+}/api/teams`;
 
 export const teamsApi = createApi({
   reducerPath: 'teamsApi',
@@ -44,7 +43,7 @@ export const teamsApi = createApi({
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       if (token) {
-        headers.set('authorization', `${token}`);
+        headers.set('authorization', `Bearer ${token}`);
       }
       return headers;
     }
