@@ -32,9 +32,10 @@ export interface GetAllTeamsRequest {
   offset: number;
 }
 
-const baseUrl = `http${process.env.NODE_ENV === 'production' ? 's' : ''}://${
-  window.location.host
-}/api/teams`;
+const baseUrl =
+  process.env.NODE_ENV === 'production'
+    ? `https://${window.location.hostname}/api/teams`
+    : `http://${window.location.hostname}:8080/api/teams`;
 
 export const teamsApi = createApi({
   reducerPath: 'teamsApi',

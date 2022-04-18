@@ -10,9 +10,10 @@ export interface SearchResponse {
   results: Array<User>;
 }
 
-const baseUrl = `http${process.env.NODE_ENV === 'production' ? 's' : ''}://${
-  window.location.host
-}/api/users`;
+const baseUrl =
+  process.env.NODE_ENV === 'production'
+    ? `https://${window.location.hostname}/api/users`
+    : `http://${window.location.hostname}:8080/api/users`;
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',

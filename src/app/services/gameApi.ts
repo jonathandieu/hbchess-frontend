@@ -22,9 +22,10 @@ interface CreateGameResponse {
   game: Game;
 }
 
-const baseUrl = `http${process.env.NODE_ENV === 'production' ? 's' : ''}://${
-  window.location.host
-}/api/games`;
+const baseUrl =
+  process.env.NODE_ENV === 'production'
+    ? `https://${window.location.hostname}/api/games`
+    : `http://${window.location.hostname}:8080/api/games`;
 
 export const gameApi = createApi({
   reducerPath: 'gameApi',
