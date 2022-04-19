@@ -22,10 +22,22 @@ interface CreateGameResponse {
   game: Game;
 }
 
+interface SaveGameResponse {
+  message: string;
+}
+
+interface SaveGameRequest {
+  white: string;
+  black: string;
+  winner: string;
+  gameId: string;
+  moves: Array<string>;
+}
+
 const baseUrl =
   process.env.NODE_ENV === 'production'
-    ? 'https://hbchess.app/api/games'
-    : 'http://localhost:8080/api/games';
+    ? `https://${window.location.hostname}/api/games`
+    : `http://${window.location.hostname}:8080/api/games`;
 
 export const gameApi = createApi({
   reducerPath: 'gameApi',
@@ -34,7 +46,7 @@ export const gameApi = createApi({
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       if (token) {
-        headers.set('authorization', `${token}`);
+        headers.set('authorization', `Bearer ${token}`);
       }
       return headers;
     }
@@ -58,8 +70,16 @@ export const gameApi = createApi({
         method: 'POST',
         body: createGameBody
       })
+    }),
+    saveGame: builder.mutation<SaveGameResponse, SaveGameRequest>({
+      query: (saveGameBody) => ({
+        url: 'save',
+        method: 'PUT',
+        body: saveGameBody
+      })
     })
   })
 });
 
-export const { useGetGamesQuery, useCreateGameMutation } = gameApi;
+export const { useGetGamesQuery, useCreateGameMutation, useSaveGameMutation } =
+  gameApi;

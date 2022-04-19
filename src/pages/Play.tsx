@@ -26,28 +26,32 @@ function Play() {
               Games Available:
             </h1>
             <ol className="space-y-4 w-3/4 text-2xl list-disc">
-              {games.map((game, index) => {
-                return (
-                  <li key={index}>
-                    <div className="flex flex-row justify-between w-full">
-                      <p>
-                        {game.white.sender.username} -{' '}
-                        {game.white.recipient.username} /{' '}
-                        {game.black.sender.username} -{' '}
-                        {game.black.recipient.username}
-                      </p>
-                      <button
-                        className="flex justify-center items-center py-1.5 px-4 w-32 h-10 text-lg font-medium text-center bg-green-600 hover:bg-green-700 rounded transition duration-200"
-                        onClick={() => {
-                          dispatch(setInGame({ game, id: user?.id ?? '' }));
-                        }}
-                      >
-                        Join Game
-                      </button>
-                    </div>
-                  </li>
-                );
-              })}
+              {games.length === 0 ? (
+                <p className="text-center">No Game Invitations Found</p>
+              ) : (
+                games.map((game, index) => {
+                  return (
+                    <li key={index}>
+                      <div className="flex flex-row justify-between w-full">
+                        <p>
+                          {game.white.sender.username} -{' '}
+                          {game.white.recipient.username} /{' '}
+                          {game.black.sender.username} -{' '}
+                          {game.black.recipient.username}
+                        </p>
+                        <button
+                          className="flex justify-center items-center py-1.5 px-4 w-32 h-10 text-lg font-medium text-center bg-green-600 hover:bg-green-700 rounded transition duration-200"
+                          onClick={() => {
+                            dispatch(setInGame({ game, id: user?.id ?? '' }));
+                          }}
+                        >
+                          Join Game
+                        </button>
+                      </div>
+                    </li>
+                  );
+                })
+              )}
             </ol>
           </div>
         </div>
