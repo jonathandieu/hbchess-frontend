@@ -22,6 +22,18 @@ interface CreateGameResponse {
   game: Game;
 }
 
+interface SaveGameResponse {
+  message: string;
+}
+
+interface SaveGameRequest {
+  white: string;
+  black: string;
+  winner: string;
+  gameId: string;
+  moves: Array<string>;
+}
+
 const baseUrl =
   process.env.NODE_ENV === 'production'
     ? `https://${window.location.hostname}/api/games`
@@ -58,8 +70,16 @@ export const gameApi = createApi({
         method: 'POST',
         body: createGameBody
       })
+    }),
+    saveGame: builder.mutation<SaveGameResponse, SaveGameRequest>({
+      query: (saveGameBody) => ({
+        url: 'save',
+        method: 'PUT',
+        body: saveGameBody
+      })
     })
   })
 });
 
-export const { useGetGamesQuery, useCreateGameMutation } = gameApi;
+export const { useGetGamesQuery, useCreateGameMutation, useSaveGameMutation } =
+  gameApi;

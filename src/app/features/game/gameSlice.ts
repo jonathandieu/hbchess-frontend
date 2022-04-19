@@ -11,6 +11,7 @@ export interface GameState {
   black: Team | null;
   teamTurn: 'w' | 'b';
   board: Array<Array<{ type: PieceType; color: 'w' | 'b' } | null>>;
+  moves: string;
   playersIn: Array<string>;
   result: string;
   isWhite: boolean;
@@ -27,6 +28,7 @@ const initialState: GameState = {
   black: null,
   teamTurn: 'w',
   board: [],
+  moves: '',
   playersIn: [],
   result: '',
   isWhite: false,
@@ -72,6 +74,7 @@ export const gameSlice = createSlice({
             (game.black.recipient._id === id && !game.isBlackSenderHand)));
     },
     resetGame: (state) => {
+      console.log('TEST');
       state = initialState;
       const chess = getChess();
       chess.reset();
@@ -117,11 +120,12 @@ export const gameSlice = createSlice({
       const chess = getChess();
       chess.move(move);
       state.board = chess.board();
+      state.moves = chess.pgn();
       state.possibleMoves = [];
       state.highlightedSquare = '';
 
       if (chess.in_checkmate()) {
-        state.result = `${state.teamTurn === 'w' ? 'White' : 'Black'} Wins`;
+        state.result = state.teamTurn === 'w' ? 'White' : 'Black';
         return;
       } else if (
         chess.in_stalemate() ||
@@ -159,6 +163,7 @@ export const selectGameState = (state: RootState) => ({
   black: state.game.black,
   teamTurn: state.game.teamTurn,
   board: state.game.board,
+  moves: state.game.moves,
   playersIn: state.game.playersIn,
   isWhite: state.game.isWhite,
   isHand: state.game.isHand,
