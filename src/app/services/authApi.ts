@@ -22,8 +22,8 @@ export interface RegisterRequest {
 
 const baseUrl =
   process.env.NODE_ENV === 'production'
-    ? 'https://hbchess.app/api/users'
-    : 'http://localhost:8080/api/users';
+    ? `https://${window.location.hostname}/api/users`
+    : `http://${window.location.hostname}:8080/api/users`;
 
 export const authApi = createApi({
   reducerPath: 'authApi',
@@ -32,7 +32,7 @@ export const authApi = createApi({
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       if (token) {
-        headers.set('authorization', `${token}`);
+        headers.set('authorization', `Bearer ${token}`);
       }
       return headers;
     }

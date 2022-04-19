@@ -3,16 +3,16 @@ import { io, Socket } from 'socket.io-client';
 
 const baseUrl =
   process.env.NODE_ENV === 'production'
-    ? 'https://hbchess.app/api/socket.io'
-    : 'http://localhost:8080/api/socket.io';
+    ? `https://${window.location.hostname}/api/socket.io`
+    : `http://${window.location.hostname}:8080/api/socket.io`;
 
 let socket: Socket;
 const getSocket = (token: string) => {
   if (!socket) {
     socket = io(
-      process.env.NODE === 'production'
-        ? 'https://hbchess.app'
-        : 'http://localhost:65080',
+      process.env.NODE_ENV === 'production'
+        ? `https://${window.location.hostname}`
+        : `http://${window.location.hostname}:65080`,
       {
         transports: ['websocket'],
         query: {
