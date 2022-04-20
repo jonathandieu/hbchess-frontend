@@ -4,6 +4,7 @@ import { RegisterRequest, useRegisterMutation } from '../app/services/authApi';
 import { Link, useNavigate } from 'react-router-dom';
 import Spinner from '../components/Spinner';
 import { toast } from 'react-toastify';
+import HBChessLogo from '../assets/hblogo.png';
 
 function Register() {
   const navigate = useNavigate();
@@ -35,9 +36,9 @@ function Register() {
       <div className="p-5 space-y-8 w-full max-w-md bg-gray-50 rounded-lg shadow-2xl">
         <div>
           <img
-            className="mx-auto w-auto h-12"
-            src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-            alt="Workflow"
+            className="mx-auto w-auto h-24"
+            src={HBChessLogo}
+            alt="HBChess"
           />
           <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
             Create your account today!
