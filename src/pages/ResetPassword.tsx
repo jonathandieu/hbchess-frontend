@@ -1,36 +1,33 @@
 import { LockClosedIcon } from '@heroicons/react/solid';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAppDispatch } from '../hooks/store';
-import { setCredentials } from '../app/features/auth/authSlice';
-import { useLoginMutation } from '../app/services/authApi';
-import type { LoginRequest } from '../app/services/authApi';
+import { useNavigate } from 'react-router-dom';
+import { useChangePasswordMutation } from '../app/services/authApi';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import Spinner from '../components/Spinner';
 import HBChessLogo from '../assets/hblogo.png';
 
-function Login() {
-  const dispatch = useAppDispatch();
+function ResetPassword() {
   const navigate = useNavigate();
 
-  const [login, { isLoading }] = useLoginMutation();
+  const [changePassword, { isLoading }] = useChangePasswordMutation();
 
-  const [loginFormState, setLoginFormState] = useState<LoginRequest>({
-    email: '',
-    password: ''
+  const [resetPasswordFormState, setResetPasswordFormState] = useState({
+    username: '',
+    password: '',
+    newPassword: ''
   });
 
   const handleChange = ({
     target: { name, value }
   }: React.ChangeEvent<HTMLInputElement>) =>
-    setLoginFormState((prev) => ({ ...prev, [name]: value }));
+    setResetPasswordFormState((prev) => ({ ...prev, [name]: value }));
 
-  const handleLoginRequest = async () => {
+  const handleResetPassword = async () => {
     try {
-      const token = await login(loginFormState).unwrap();
-      dispatch(setCredentials(token));
+      const response = await changePassword(resetPasswordFormState).unwrap();
       toast.dismiss();
-      navigate('/dashboard');
+      toast.success(response.message);
+      navigate('/auth/login');
     } catch (err) {
       toast.error(err.data.message);
     }
@@ -46,7 +43,7 @@ function Login() {
             alt="HBChess"
           />
           <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
-            Sign in to your account
+            Reset Password
           </h2>
         </div>
         <form className="mt-8 space-y-6" action="#" method="POST">
@@ -54,66 +51,55 @@ function Login() {
           <div className="-space-y-px rounded-md shadow-sm">
             <div>
               <label htmlFor="email-address" className="sr-only">
-                Email address
+                Username
               </label>
               <input
-                id="email-address"
-                name="email"
-                type="email"
-                autoComplete="email"
+                id="username"
+                name="username"
+                type="username"
+                autoComplete="username"
                 required
                 className="block relative focus:z-10 py-2 px-3 w-full text-gray-900 placeholder:text-gray-500 rounded-none rounded-t-md border border-gray-300 focus:border-green-500 focus:outline-none focus:ring-green-500 appearance-none sm:text-sm"
-                placeholder="Email address"
+                placeholder="Username"
                 onChange={handleChange}
               />
             </div>
             <div>
-              <label htmlFor="password" className="sr-only">
-                Password
+              <label htmlFor="email-address" className="sr-only">
+                Old Password
               </label>
               <input
                 id="password"
                 name="password"
                 type="password"
-                autoComplete="current-password"
+                autoComplete="old-password"
                 required
-                className="block relative focus:z-10 py-2 px-3 w-full text-gray-900 placeholder:text-gray-500 rounded-none rounded-b-md border border-gray-300 focus:border-green-500 focus:outline-none focus:ring-green-500 appearance-none sm:text-sm"
-                placeholder="Password"
+                className="block relative focus:z-10 py-2 px-3 w-full text-gray-900 placeholder:text-gray-500 rounded-none border border-gray-300 focus:border-green-500 focus:outline-none focus:ring-green-500 appearance-none sm:text-sm"
+                placeholder="Old Password"
                 onChange={handleChange}
               />
             </div>
-          </div>
-
-          <div className="flex justify-between items-center">
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                className="w-4 h-4 text-green-600 rounded border-gray-300 focus:ring-green-500"
-              />
-              <label
-                htmlFor="remember-me"
-                className="block ml-2 text-sm text-gray-900"
-              >
-                Remember me
+            <div>
+              <label htmlFor="password" className="sr-only">
+                New Password
               </label>
-            </div>
-
-            <div className="text-sm">
-              <Link
-                to="/auth/resetPassword"
-                className="font-medium text-green-600 hover:text-green-500"
-              >
-                Forgot your password?
-              </Link>
+              <input
+                id="newPassword"
+                name="newPassword"
+                type="password"
+                autoComplete="new-password"
+                required
+                className="block relative focus:z-10 py-2 px-3 w-full text-gray-900 placeholder:text-gray-500 rounded-none rounded-b-md border border-gray-300 focus:border-green-500 focus:outline-none focus:ring-green-500 appearance-none sm:text-sm"
+                placeholder="New Password"
+                onChange={handleChange}
+              />
             </div>
           </div>
 
           <div>
             <button
               type="button"
-              onClick={handleLoginRequest}
+              onClick={handleResetPassword}
               className="group flex relative justify-center py-2 px-4 w-full text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-md border border-transparent focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
             >
               <span className="flex absolute inset-y-0 left-0 items-center pl-3">
@@ -122,7 +108,7 @@ function Login() {
                   aria-hidden="true"
                 />
               </span>
-              {isLoading ? <Spinner /> : 'Sign in'}
+              {isLoading ? <Spinner /> : 'Reset Password'}
             </button>
           </div>
         </form>
@@ -131,4 +117,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default ResetPassword;
