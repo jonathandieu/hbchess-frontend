@@ -1,14 +1,30 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState, useEffect } from 'react';
+import { useInGame } from '../hooks/useInGame';
 import { useGameState } from '../hooks/useGameState';
+import { useSaveGameMutation } from '../app/services/gameApi';
+import { useNavigate } from 'react-router-dom';
+import { resetGame } from '../app/features/game/gameSlice';
+import { useAppDispatch } from '../hooks/store';
 
 const ShowResultDialog = () => {
-  const { result } = useGameState();
+  const { result, white, black, moves } = useGameState();
+  const { roomId } = useInGame();
+  const [saveGame] = useSaveGameMutation();
 
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     setIsOpen(result !== '');
+    saveGame({
+      white: white._id,
+      black: black._id,
+      winner: result,
+      gameId: roomId,
+      moves
+    });
   }, [result]);
 
   function closeModal() {
@@ -45,14 +61,16 @@ const ShowResultDialog = () => {
                   as="h1"
                   className="text-2xl font-medium leading-6 text-gray-900"
                 >
-                  {result}
+                  {result !== 'Draw' ? `${result} Wins` : result}
                 </Dialog.Title>
                 <div className="flex flex-1 justify-between items-end mt-4">
                   <button
                     type="button"
                     className="flex justify-center items-center py-1.5 px-4 h-10 text-lg font-medium text-center bg-green-600 hover:bg-green-700 rounded transition duration-200"
                     onClick={() => {
+                      dispatch(resetGame());
                       closeModal();
+                      navigate('/dashboard');
                     }}
                   >
                     Back to Dashboard

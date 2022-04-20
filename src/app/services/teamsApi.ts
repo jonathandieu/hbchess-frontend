@@ -7,9 +7,9 @@ export interface Team {
   sender: User;
   recipient: User;
   matches: number;
-  wins: number;
-  losses: number;
-  ties: number;
+  wins: Array<string>;
+  losses: Array<string>;
+  ties: Array<string>;
   name: string;
   accepted: boolean;
 }
@@ -34,8 +34,8 @@ export interface GetAllTeamsRequest {
 
 const baseUrl =
   process.env.NODE_ENV === 'production'
-    ? 'https://hbchess.app/api/teams'
-    : 'http://localhost:8080/api/teams';
+    ? `https://${window.location.hostname}/api/teams`
+    : `http://${window.location.hostname}:8080/api/teams`;
 
 export const teamsApi = createApi({
   reducerPath: 'teamsApi',
@@ -44,7 +44,7 @@ export const teamsApi = createApi({
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       if (token) {
-        headers.set('authorization', `${token}`);
+        headers.set('authorization', `Bearer ${token}`);
       }
       return headers;
     }
