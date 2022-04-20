@@ -1,5 +1,6 @@
 import PlayGameButton from '../components/PlayGameButton';
 import PreviousGamesList from '../components/PreviousGamesList';
+
 function Dashboard() {
   return (
     <div className="flex justify-center items-center w-full h-full">
