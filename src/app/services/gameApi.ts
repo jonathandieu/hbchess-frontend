@@ -77,9 +77,16 @@ export const gameApi = createApi({
         method: 'PUT',
         body: saveGameBody
       })
+    }),
+    getDashboard: builder.query<Game[], void>({
+      query: () => 'dashboard'
     })
   })
 });
 
-export const { useGetGamesQuery, useCreateGameMutation, useSaveGameMutation } =
-  gameApi;
+export const {
+  useGetGamesQuery,
+  useCreateGameMutation,
+  useSaveGameMutation,
+  useGetDashboardQuery
+} = gameApi;
