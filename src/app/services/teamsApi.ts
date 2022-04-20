@@ -7,9 +7,9 @@ export interface Team {
   sender: User;
   recipient: User;
   matches: number;
-  wins: number;
-  losses: number;
-  ties: number;
+  wins: Array<string>;
+  losses: Array<string>;
+  ties: Array<string>;
   name: string;
   accepted: boolean;
 }
