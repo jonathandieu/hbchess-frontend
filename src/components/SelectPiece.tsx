@@ -57,7 +57,7 @@ export default function Example() {
     {
       piece: 'Knight',
       asset: isWhite ? w_knight : b_knight,
-      isValid: pieceHasValidMoves('k')
+      isValid: pieceHasValidMoves('n')
     },
     {
       piece: 'Bishop',
