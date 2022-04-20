@@ -1,31 +1,33 @@
-import { useState } from 'react';
 import { LockClosedIcon } from '@heroicons/react/solid';
-import { RegisterRequest, useRegisterMutation } from '../app/services/authApi';
-import { Link, useNavigate } from 'react-router-dom';
-import Spinner from '../components/Spinner';
+import { useNavigate } from 'react-router-dom';
+import { useChangePasswordMutation } from '../app/services/authApi';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
+import Spinner from '../components/Spinner';
 import HBChessLogo from '../assets/hblogo.png';
 
-function Register() {
+function ResetPassword() {
   const navigate = useNavigate();
 
-  const [register, { isLoading }] = useRegisterMutation();
-  const [registerFormState, setRegisterFormState] = useState<RegisterRequest>({
+  const [changePassword, { isLoading }] = useChangePasswordMutation();
+
+  const [resetPasswordFormState, setResetPasswordFormState] = useState({
     username: '',
-    email: '',
-    password: ''
+    password: '',
+    newPassword: ''
   });
 
   const handleChange = ({
     target: { name, value }
   }: React.ChangeEvent<HTMLInputElement>) =>
-    setRegisterFormState((prev) => ({ ...prev, [name]: value }));
+    setResetPasswordFormState((prev) => ({ ...prev, [name]: value }));
 
-  const handleRegisterRequest = async () => {
+  const handleResetPassword = async () => {
     try {
-      const response = await register(registerFormState).unwrap();
-      navigate('/auth/login');
+      const response = await changePassword(resetPasswordFormState).unwrap();
+      toast.dismiss();
       toast.success(response.message);
+      navigate('/auth/login');
     } catch (err) {
       toast.error(err.data.message);
     }
@@ -41,7 +43,7 @@ function Register() {
             alt="HBChess"
           />
           <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
-            Create your account today!
+            Reset Password
           </h2>
         </div>
         <form className="mt-8 space-y-6" action="#" method="POST">
@@ -54,7 +56,7 @@ function Register() {
               <input
                 id="username"
                 name="username"
-                type="text"
+                type="username"
                 autoComplete="username"
                 required
                 className="block relative focus:z-10 py-2 px-3 w-full text-gray-900 placeholder:text-gray-500 rounded-none rounded-t-md border border-gray-300 focus:border-green-500 focus:outline-none focus:ring-green-500 appearance-none sm:text-sm"
@@ -64,31 +66,31 @@ function Register() {
             </div>
             <div>
               <label htmlFor="email-address" className="sr-only">
-                Email address
-              </label>
-              <input
-                id="email-address"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                className="block relative focus:z-10 py-2 px-3 w-full text-gray-900 placeholder:text-gray-500 rounded-none border border-gray-300 focus:border-green-500 focus:outline-none focus:ring-green-500 appearance-none sm:text-sm"
-                placeholder="Email address"
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="sr-only">
-                Password
+                Old Password
               </label>
               <input
                 id="password"
                 name="password"
                 type="password"
-                autoComplete="current-password"
+                autoComplete="old-password"
+                required
+                className="block relative focus:z-10 py-2 px-3 w-full text-gray-900 placeholder:text-gray-500 rounded-none border border-gray-300 focus:border-green-500 focus:outline-none focus:ring-green-500 appearance-none sm:text-sm"
+                placeholder="Old Password"
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <label htmlFor="password" className="sr-only">
+                New Password
+              </label>
+              <input
+                id="newPassword"
+                name="newPassword"
+                type="password"
+                autoComplete="new-password"
                 required
                 className="block relative focus:z-10 py-2 px-3 w-full text-gray-900 placeholder:text-gray-500 rounded-none rounded-b-md border border-gray-300 focus:border-green-500 focus:outline-none focus:ring-green-500 appearance-none sm:text-sm"
-                placeholder="Password"
+                placeholder="New Password"
                 onChange={handleChange}
               />
             </div>
@@ -97,7 +99,7 @@ function Register() {
           <div>
             <button
               type="button"
-              onClick={handleRegisterRequest}
+              onClick={handleResetPassword}
               className="group flex relative justify-center py-2 px-4 w-full text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-md border border-transparent focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
             >
               <span className="flex absolute inset-y-0 left-0 items-center pl-3">
@@ -106,20 +108,8 @@ function Register() {
                   aria-hidden="true"
                 />
               </span>
-              {isLoading ? <Spinner /> : 'Sign up'}
+              {isLoading ? <Spinner /> : 'Reset Password'}
             </button>
-          </div>
-
-          <div className="flex justify-center">
-            <div className="text-sm">
-              {'Already have an account? '}
-              <Link
-                to="/auth/login"
-                className="font-medium text-green-600 hover:text-green-500"
-              >
-                Sign In
-              </Link>
-            </div>
           </div>
         </form>
       </div>
@@ -127,4 +117,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default ResetPassword;

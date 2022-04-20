@@ -10,12 +10,12 @@ import Dashboard from './pages/Dashboard';
 import Play from './pages/Play';
 import Teams from './pages/Teams';
 import Stats from './pages/Stats';
+import ResetPassword from './pages/ResetPassword';
 import { store } from './app/store';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
 import { ToastContainer } from 'react-toastify';
-
 import './styles/index.css';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -33,6 +33,8 @@ ReactDOM.render(
               <Route path="/" element={<Landing />} />
               <Route path="/auth/login" element={<Login />} />
               <Route path="/auth/signup" element={<Register />} />
+              <Route path="/auth/resetPassword" element={<ResetPassword />} />
+
               <Route path="/leaderboard" element={<Leaderboard />} />
             </Route>
 
