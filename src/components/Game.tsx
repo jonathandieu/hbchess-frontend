@@ -1,6 +1,7 @@
 import {
   useJoinGameMutation,
-  usePlayerJoinsQuery
+  usePlayerJoinsQuery,
+  useSentEmojiQuery
 } from '../app/services/socketApi';
 import { useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
@@ -11,7 +12,8 @@ import ShowResultDialog from './ShowResultDialog';
 import {
   addJoinedPlayer,
   setPiecePicked,
-  setMove
+  setMove,
+  setEmoji
 } from '../app/features/game/gameSlice';
 import { useAppDispatch } from '../hooks/store';
 import {
@@ -26,6 +28,7 @@ const Game = () => {
   const { data: joined = [] } = usePlayerJoinsQuery(token);
   const { data: pickedPiece = [] } = usePickedPieceQuery(token);
   const { data: sentMove = [] } = useSentMoveQuery(token);
+  const { data: sentEmoji = [] } = useSentEmojiQuery(token);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -45,6 +48,10 @@ const Game = () => {
   useEffect(() => {
     dispatch(setMove({ move: sentMove[sentMove.length - 1] }));
   }, [sentMove]);
+
+  useEffect(() => {
+    dispatch(setEmoji({ emoji: sentEmoji[sentEmoji.length - 1] }));
+  }, [sentEmoji]);
 
   return (
     <div className="flex flex-row justify-around items-center w-full h-full">
