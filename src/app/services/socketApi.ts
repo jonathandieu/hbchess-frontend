@@ -166,6 +166,52 @@ export const socketApi = createApi({
           // cacheDataLoaded throws
         }
       }
+    }),
+    sendEmoji: builder.mutation<
+      { message: string },
+      { token: string; roomId: string; emoji: string }
+    >({
+      queryFn: ({
+        token,
+        roomId,
+        emoji
+      }: {
+        token: string;
+        roomId: string;
+        emoji: string;
+      }) => {
+        const socket = getSocket(token);
+        return new Promise((resolve) => {
+          socket.emit('send_emoji', { roomId, emoji }, (message: string) =>
+            resolve({ data: { message } })
+          );
+        });
+      }
+    }),
+    sentEmoji: builder.query<Array<string>, string>({
+      queryFn: () => ({ data: [] }),
+      async onCacheEntryAdded(
+        token,
+        { cacheDataLoaded, cacheEntryRemoved, updateCachedData }
+      ) {
+        try {
+          await cacheDataLoaded;
+          const socket = getSocket(token);
+
+          socket.on('sentEmoji', (emoji: string) => {
+            updateCachedData((draft) => {
+              draft.push(emoji);
+            });
+          });
+
+          await cacheEntryRemoved;
+
+          socket.off('sentEmoji');
+        } catch {
+          // if cacheEntryRemoved resolved before cacheDataLoaded,
+          // cacheDataLoaded throws
+        }
+      }
     })
   })
 });
@@ -176,5 +222,7 @@ export const {
   usePickPieceMutation,
   usePickedPieceQuery,
   useMakeMoveMutation,
-  useSentMoveQuery
+  useSentMoveQuery,
+  useSendEmojiMutation,
+  useSentEmojiQuery
 } = socketApi;
