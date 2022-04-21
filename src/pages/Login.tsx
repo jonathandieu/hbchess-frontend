@@ -102,7 +102,7 @@ function Login() {
 
             <div className="text-sm">
               <Link
-                to="/auth/resetPassword"
+                to="/auth/forgotPassword"
                 className="font-medium text-green-600 hover:text-green-500"
               >
                 Forgot your password?

@@ -1,52 +1,33 @@
 import { LockClosedIcon } from '@heroicons/react/solid';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useResetPasswordMutation } from '../app/services/authApi';
+import { useNavigate } from 'react-router-dom';
+import { useForgotPasswordMutation } from '../app/services/authApi';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import Spinner from '../components/Spinner';
 import HBChessLogo from '../assets/hblogo.png';
 
-function ResetPassword() {
+function ForgotPassword() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const emailToken = searchParams.get('emailToken');
 
-  const [resetPassword, { isLoading }] = useResetPasswordMutation();
+  const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
 
-  const [resetPasswordFormState, setResetPasswordFormState] = useState({
-    password: ''
+  const [forgotPasswordFormState, setForgotPasswordFormState] = useState({
+    email: ''
   });
 
   const handleChange = ({
     target: { name, value }
   }: React.ChangeEvent<HTMLInputElement>) =>
-    setResetPasswordFormState((prev) => ({ ...prev, [name]: value }));
+    setForgotPasswordFormState((prev) => ({ ...prev, [name]: value }));
 
   const handleResetPassword = async () => {
-    if (emailToken !== null) {
-      try {
-        const response = await resetPassword({
-          emailToken,
-          password: resetPasswordFormState['password']
-        }).unwrap();
-        toast.dismiss();
-        toast.success(response.message);
-        navigate('/auth/login');
-      } catch (err) {
-        toast.error(err.data.message);
-      }
-    } else {
-      try {
-        const response = await resetPassword({
-          emailToken: '',
-          password: resetPasswordFormState['password']
-        }).unwrap();
-        toast.dismiss();
-        toast.success(response.message);
-        navigate('/auth/login');
-      } catch (err) {
-        toast.error(err.data.message);
-      }
+    try {
+      const response = await forgotPassword(forgotPasswordFormState).unwrap();
+      toast.dismiss();
+      toast.success(response.message);
+      navigate('/auth/login');
+    } catch (err) {
+      toast.error(err.data.message);
     }
   };
 
@@ -67,17 +48,17 @@ function ResetPassword() {
           <input type="hidden" name="remember" defaultValue="true" />
           <div className="-space-y-px rounded-md shadow-sm">
             <div>
-              <label htmlFor="password" className="sr-only">
-                New Password
+              <label htmlFor="email" className="sr-only">
+                E-mail address
               </label>
               <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="new-password"
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
                 required
                 className="block relative focus:z-10 py-2 px-3 w-full text-gray-900 placeholder:text-gray-500 rounded-none rounded-b-md border border-gray-300 focus:border-green-500 focus:outline-none focus:ring-green-500 appearance-none sm:text-sm"
-                placeholder="New Password"
+                placeholder="E-mail address"
                 onChange={handleChange}
               />
             </div>
@@ -104,4 +85,4 @@ function ResetPassword() {
   );
 }
 
-export default ResetPassword;
+export default ForgotPassword;
