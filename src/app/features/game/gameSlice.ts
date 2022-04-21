@@ -74,7 +74,6 @@ export const gameSlice = createSlice({
             (game.black.recipient._id === id && !game.isBlackSenderHand)));
     },
     resetGame: (state) => {
-      console.log('TEST');
       state = initialState;
       const chess = getChess();
       chess.reset();
