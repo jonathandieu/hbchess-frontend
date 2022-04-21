@@ -39,7 +39,7 @@ const initialState: GameState = {
 };
 
 let chess: ChessInstance;
-const getChess = () => {
+export const getChess = () => {
   if (!chess) {
     chess = new Chess();
   }
