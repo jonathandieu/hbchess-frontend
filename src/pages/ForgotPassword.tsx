@@ -20,7 +20,7 @@ function ForgotPassword() {
   }: React.ChangeEvent<HTMLInputElement>) =>
     setForgotPasswordFormState((prev) => ({ ...prev, [name]: value }));
 
-  const handleResetPassword = async () => {
+  const handleForgotPassword = async () => {
     try {
       const response = await forgotPassword(forgotPasswordFormState).unwrap();
       toast.dismiss();
@@ -41,7 +41,7 @@ function ForgotPassword() {
             alt="HBChess"
           />
           <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
-            Reset Password
+            Forgot Password?
           </h2>
         </div>
         <form className="mt-8 space-y-6" action="#" method="POST">
@@ -57,7 +57,7 @@ function ForgotPassword() {
                 type="email"
                 autoComplete="email"
                 required
-                className="block relative focus:z-10 py-2 px-3 w-full text-gray-900 placeholder:text-gray-500 rounded-none rounded-b-md border border-gray-300 focus:border-green-500 focus:outline-none focus:ring-green-500 appearance-none sm:text-sm"
+                className="block relative focus:z-10 py-2 px-3 w-full text-gray-900 placeholder:text-gray-500 rounded-md border border-gray-300 focus:border-green-500 focus:outline-none focus:ring-green-500 appearance-none sm:text-sm"
                 placeholder="E-mail address"
                 onChange={handleChange}
               />
@@ -67,7 +67,7 @@ function ForgotPassword() {
           <div>
             <button
               type="button"
-              onClick={handleResetPassword}
+              onClick={handleForgotPassword}
               className="group flex relative justify-center py-2 px-4 w-full text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-md border border-transparent focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
             >
               <span className="flex absolute inset-y-0 left-0 items-center pl-3">
@@ -76,7 +76,7 @@ function ForgotPassword() {
                   aria-hidden="true"
                 />
               </span>
-              {isLoading ? <Spinner /> : 'Reset Password'}
+              {isLoading ? <Spinner /> : 'Send Reset Link'}
             </button>
           </div>
         </form>
