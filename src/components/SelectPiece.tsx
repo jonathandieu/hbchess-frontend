@@ -25,7 +25,7 @@ import { setPiecePicked, getChess } from '../app/features/game/gameSlice';
 
 export default function Example() {
   const { roomId } = useInGame();
-  const { isWhite, board, pieceSelected } = useGameState();
+  const { isWhite, board, pieceSelected, result } = useGameState();
   const { token } = useAuth();
   const dispatch = useAppDispatch();
 
@@ -83,6 +83,14 @@ export default function Example() {
   const [selectedPiece, setSelectedPiece] = useState('');
 
   const [pickPiece] = usePickPieceMutation();
+
+  if (result !== '') {
+    return (
+      <p className="flex flex-1 justify-center items-center text-base font-medium text-sky-100 3xl:text-lg">
+        Game has ended.
+      </p>
+    );
+  }
 
   if (pieceSelected && pieceSelected !== '') {
     const asset = getAsset(

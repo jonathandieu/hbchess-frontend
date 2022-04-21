@@ -2,11 +2,19 @@ import { useGameState } from '../hooks/useGameState';
 import { getAsset } from './Board';
 
 const PieceSelected = () => {
-  const { pieceSelected, isWhite } = useGameState();
+  const { pieceSelected, isWhite, result } = useGameState();
   const asset = getAsset(
     isWhite ? 'w' : 'b',
     getPieceIdentifier(pieceSelected)
   );
+
+  if (result !== '') {
+    return (
+      <p className="flex flex-1 justify-center items-center text-base font-medium text-sky-100 3xl:text-lg">
+        Game has ended.
+      </p>
+    );
+  }
 
   return (
     <>
