@@ -136,7 +136,11 @@ export default function Example() {
                         : ''
                     }
                   ${
-                    checked ? 'bg-sky-900 bg-opacity-75 text-white' : 'bg-white'
+                    checked
+                      ? 'bg-sky-900 bg-opacity-75 text-white'
+                      : option.isValid
+                      ? 'bg-white'
+                      : 'bg-slate-500'
                   }
                     relative rounded-lg shadow-md px-5 py-4 cursor-pointer flex focus:outline-none`
                   }
@@ -149,7 +153,9 @@ export default function Example() {
                             <RadioGroup.Label
                               as="div"
                               className={`font-medium  ${
-                                checked ? 'text-white' : 'text-gray-900'
+                                checked || !option.isValid
+                                  ? 'text-white'
+                                  : 'text-gray-900'
                               }`}
                             >
                               <img
@@ -160,7 +166,9 @@ export default function Example() {
                             <RadioGroup.Description
                               as="div"
                               className={`flex flex-1 justify-center items-center text-base 3xl:text-lg font-medium ${
-                                checked ? 'text-sky-100' : 'text-gray-500'
+                                checked || !option.isValid
+                                  ? 'text-sky-100'
+                                  : 'text-gray-500'
                               }`}
                             >
                               {option.piece}
