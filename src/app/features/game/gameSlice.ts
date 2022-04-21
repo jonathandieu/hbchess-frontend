@@ -19,6 +19,7 @@ export interface GameState {
   pieceSelected: string;
   possibleMoves: Array<string>;
   highlightedSquare: string;
+  emoji: string;
 }
 
 const initialState: GameState = {
@@ -35,7 +36,8 @@ const initialState: GameState = {
   isHand: false,
   pieceSelected: '',
   possibleMoves: [],
-  highlightedSquare: ''
+  highlightedSquare: '',
+  emoji: ''
 };
 
 let chess: ChessInstance;
@@ -138,6 +140,12 @@ export const gameSlice = createSlice({
 
       state.pieceSelected = '';
       state.teamTurn = state.teamTurn === 'w' ? 'b' : 'w';
+    },
+    setEmoji: (
+      state,
+      { payload: { emoji } }: PayloadAction<{ emoji: string }>
+    ) => {
+      state.emoji = emoji;
     }
   }
 });
@@ -148,7 +156,8 @@ export const {
   addJoinedPlayer,
   setPiecePicked,
   setPossibleMoves,
-  setMove
+  setMove,
+  setEmoji
 } = gameSlice.actions;
 
 export default gameSlice.reducer;
@@ -171,5 +180,6 @@ export const selectGameState = (state: RootState) => ({
   pieceSelectedAsset: state.game.pieceSelectedAsset,
   possibleMoves: state.game.possibleMoves,
   highlightedSquare: state.game.highlightedSquare,
-  result: state.game.result
+  result: state.game.result,
+  emoji: state.game.emoji
 });
