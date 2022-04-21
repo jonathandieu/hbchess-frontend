@@ -11,6 +11,7 @@ import Play from './pages/Play';
 import Teams from './pages/Teams';
 import Stats from './pages/Stats';
 import ResetPassword from './pages/ResetPassword';
+import ForgotPassword from './pages/ForgotPassword';
 import { store } from './app/store';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -34,6 +35,7 @@ ReactDOM.render(
               <Route path="/auth/login" element={<Login />} />
               <Route path="/auth/signup" element={<Register />} />
               <Route path="/auth/resetPassword" element={<ResetPassword />} />
+              <Route path="/auth/forgotPassword" element={<ForgotPassword />} />
 
               <Route path="/leaderboard" element={<Leaderboard />} />
             </Route>
