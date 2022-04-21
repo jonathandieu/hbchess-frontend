@@ -7,8 +7,6 @@ const PreviousGamesList = () => {
 
   const { data: finishedGames = [] } = useGetDashboardQuery();
 
-  const whiteTeam = `${game.white.sender.username} - ${game.white.recipient.username}`;
-  const blackTeam = `${game.black.sender.username} - ${game.black.recipient.username}`;
   return (
     <>
       <h1 className="pb-3 w-full text-3xl border-b-2 border-gray-300">
@@ -32,6 +30,9 @@ const PreviousGamesList = () => {
           </thead>
           <tbody>
             {finishedGames.map((game) => {
+              const whiteTeam = `${game.white.sender.username} - ${game.white.recipient.username}`;
+              const blackTeam = `${game.black.sender.username} - ${game.black.recipient.username}`;
+
               return (
                 <tr
                   className="bg-white hover:bg-gray-200 border-b"
